@@ -87,18 +87,5 @@ gráfico_mediamuestral_zoom <- ggplot(data = datosgráfico, aes(x = mediamuestra
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
 
 
-# Otro posibles estadísticos
-set.seed(1)
-data <- rbeta(10000, shape1 = 2, shape2 = 2)
-median(a)
-0.5*(quantile(a, probs = c(0.6)) + quantile(a, probs = c(0.4)))
-desviacion_abs_cuantil40 <- abs(unname(quantile(a, probs = c(0.4))) - median(a))
-desviacion_abs_cuantil60 <- abs(unname(quantile(a, probs = c(0.6))) - median(a))
-cuantil40_ponderación <- desviacion_abs_cuantil40 / (desviacion_abs_cuantil40 + desviacion_abs_cuantil60)
-cuantil60_ponderación <- desviacion_abs_cuantil60 / (desviacion_abs_cuantil40 + desviacion_abs_cuantil60)
-
-estadistico2 <- cuantil40_ponderación*unname(quantile(a, probs = c(0.6))) + cuantil60_ponderación*unname(quantile(a, probs = c(0.4)))
-mean(a)
-
 
 
