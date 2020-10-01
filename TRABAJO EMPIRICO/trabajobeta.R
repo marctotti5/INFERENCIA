@@ -34,7 +34,7 @@ resultados <- muestreo(alpha = 2, beta = 2)
 
 datosgráfico <- inner_join(resultados$media_muestral , resultados$estadístico)
 
-gráfico_estadistico <- ggplot(data = datosgráfico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
+gráfico_estadistico2 <- ggplot(data = datosgráfico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
         geom_vline(aes(xintercept = resultados$media_estadístico, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
