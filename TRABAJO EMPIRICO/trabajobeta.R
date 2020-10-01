@@ -32,7 +32,6 @@ muestreo <- function(alpha, beta){
 
 resultados <- muestreo(alpha = 2, beta = 2)
 
-
 datosgráfico <- inner_join(resultados$media_muestral , resultados$estadístico)
 
 gráfico_estadistico <- ggplot(data = datosgráfico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
