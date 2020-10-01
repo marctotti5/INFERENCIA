@@ -73,7 +73,7 @@ gráfico_mediamuestral <- ggplot(data = datosgráfico, aes(x = mediamuestral)) +
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 
-gráfico_mediamuestral_zoom <- ggplot(data = datosgráfico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
+gráfico_mediamuestral_zoom2 <- ggplot(data = datosgráfico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados$media_mediamuestral, col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
