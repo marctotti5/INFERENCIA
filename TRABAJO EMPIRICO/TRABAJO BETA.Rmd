@@ -1,0 +1,92 @@
+---
+title: "DISTRIBUCIONBETA"
+author: "Yo"
+date: "10/2/2020"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r setup}
+
+library(tidyverse)
+library(e1071)
+library(moments)
+library(gt)
+library(ggpubr)
+library(ggplotify)
+library(grid)
+# 1. Creamos las muestras, evaluamos el estadístico en ellas, así como la media muestral
+
+muestreo <- function(alpha, beta){
+        lista <- list()
+        tabla_muestras <- matrix(ncol = 40, nrow = 10) %>% as.data.frame()
+        lista[[6]] <- matrix(ncol = 40, nrow = 1) %>% as.data.frame()
+        media_poblacional <- alpha / (alpha + beta)
+        varianza_poblacional <- alpha * beta / (((alpha + beta) ^ 2 ) * (alpha + beta + 1))
+        for(j in 1:40){
+                set.seed(j)
+                tabla_muestras[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
+                colnames(tabla_muestras)[j] <- as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
+                colnames(lista[[6]])[j] <-  as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
+                lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], probs = c(0.6)) + quantile(tabla_muestras[, j], probs = c(0.4)))
+        }
+        lista[[1]] <- tabla_muestras
+        lista[[2]] <- media_poblacional
+        lista[[3]] <- varianza_poblacional
+        lista[[4]] <- data.frame(Muestra = names(colMeans(tabla_muestras)), mediamuestral = unname(colMeans(tabla_muestras))) 
+        lista[[5]] <- data.frame(estimador = "media_muestral", 
+                                 Media = mean(lista[[4]][, 2]),
+                                 Mediana = median(lista[[4]][, 2]),
+                                 SD = sd(lista[[4]][, 2]), 
+                                 IQR = IQR(lista[[4]][, 2]), 
+                                 MAD = mad(lista[[4]][, 2]), 
+                                 Curtosis = moments::kurtosis(lista[[4]][, 2]), 
+                                 Asimetría = e1071::skewness(lista[[4]][, 2]))
+        lista[[6]] <- gather(as.data.frame(lista[[6]])) 
+        colnames(lista[[6]]) <- c("Muestra", "Estadístico")
+        lista[[7]] <- data.frame(estimador = "estadístico",
+                                 Media = mean(lista[[6]][, 2]),
+                                 Mediana = median(lista[[6]][, 2]),
+                                 SD = sd(lista[[6]][, 2]), 
+                                 IQR = IQR(lista[[6]][, 2]), 
+                                 MAD = mad(lista[[6]][, 2]), 
+                                 Curtosis = moments::kurtosis(lista[[6]][, 2]), 
+                                 Asimetría = e1071::skewness(lista[[6]][, 2]))
+        lista[[8]] <- rbind(lista[[5]], lista[[7]])
+        names(lista) <- c("tabla_muestras", "media_poblacional", "varianza_poblacional", "media_muestral", 
+                          "medidas_media_muestral", "estadistico", "medidas_estadistico", "tabla_comparacion")
+        lista
+}
+
+
+
+resultados <- muestreo(alpha = 2, beta = 2)
+
+datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
+library(gt)
+library(tidyverse)
+gt(data = resultados$tabla_comparacion) %>% tab_header(title = "Hola em dic Marc")
+kableExtra::kbl(resultados$tabla_comparacion, format = "latex", booktabs = TRUE, longtable = TRUE) 
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
