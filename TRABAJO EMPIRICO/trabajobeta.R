@@ -1,7 +1,7 @@
 
 library(tidyverse)
 
-
+# 1. Creamos las muestras, evaluamos el estadístico en ellas, así como la media muestral
 muestreo <- function(alpha, beta){
         lista <- list()
         tabla_muestras <- matrix(ncol = 40, nrow = 10) %>% as.data.frame()
