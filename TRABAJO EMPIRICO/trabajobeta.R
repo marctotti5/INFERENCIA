@@ -31,9 +31,15 @@ muestreo <- function(alpha, beta){
         lista[[11]] <- e1071::skewness(lista[[4]][, 2])
         lista[[12]] <- mean(lista[[5]][, 2])
         lista[[13]] <- sd(lista[[5]][, 2])
+        lista[[14]] <- IQR(lista[[5]][, 2])
+        lista[[15]] <- mad(lista[[5]][, 2])
+        lista[[16]] <- moments::kurtosis(lista[[5]][, 2])
+        lista[[17]] <- e1071::skewness(lista[[5]][, 2])
+
         names(lista) <- c("tabla_muestras", "media_poblacional", "varianza_poblacional", "media_muestral", 
                           "estadistico", "media_mediamuestral", "desviacion_mediamuestral", "IQR_mediamuestral", "MAD_mediamuestral", 
-                          "kurtosis_mediamuestral", "asimetria_mediamuestral", "media_estadistico", "desviacion_estadistico")
+                          "kurtosis_mediamuestral", "asimetria_mediamuestral", "media_estadistico", "desviacion_estadistico",
+                          "IQR_estadistico","MAD_estadistico","curtosis_estadistico","asimetria_estadistico")
         lista
 }
 
