@@ -35,6 +35,8 @@ resultados <- muestreo(alpha = 2, beta = 2)
 
 datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 
+# Gráficos sobre nuestro estimador: analizar y hacer un informe de lo que significa calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
+
 grafico_estadistico <- ggplot(data = datosgrafico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
         geom_vline(aes(xintercept = resultados$media_estadistico, col = "Estimador"), linetype = "dashed", size = 1) +
@@ -61,6 +63,8 @@ grafico_estadistico_zoom <- ggplot(data = datosgrafico, aes(x = Estadístico)) +
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
 
+
+# Gráficos media muestral: analizar y hacer un informe de lo que significa , calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
 grafico_mediamuestral <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados$media_mediamuestral, col = "Media Muestral"), linetype = "dashed", size = 1) +
