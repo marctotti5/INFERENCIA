@@ -22,21 +22,22 @@ muestreo <- function(alpha, beta){
         lista[[5]] <- gather(as.data.frame(lista[[5]])) 
         colnames(lista[[5]]) <- c("Muestra", "Estadístico")
         lista[[6]] <- mean(lista[[4]][, 2])
-        lista[[7]] <- mean(lista[[5]][, 2])
-        lista[[8]] <- sd(lista[[5]][, 2])
+        lista[[7]] <- sd(lista[[4]][, 2])
+        lista[[8]] <- mean(lista[[5]][, 2])
+        lista[[9]] <- sd(lista[[5]][, 2])
         names(lista) <- c("tabla_muestras", "media_poblacional", "varianza_poblacional", "media_muestral", 
-                          "estadístico", "media_mediamuestral", "media_estadístico", "desviación_estadístico")
+                          "estadistico", "media_mediamuestral", "desviacion_mediamuestral", "media_estadistico", "desviacion_estadistico")
         lista
 }
 
 
 resultados <- muestreo(alpha = 2, beta = 2)
 
-datosgráfico <- inner_join(resultados$media_muestral , resultados$estadístico)
+datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 
-gráfico_estadistico <- ggplot(data = datosgráfico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
+grafico_estadistico <- ggplot(data = datosgrafico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados$media_estadístico, col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_estadistico, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
         scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
         xlab("x") + ylab("f(x)") +
@@ -47,9 +48,9 @@ gráfico_estadistico <- ggplot(data = datosgráfico, aes(x = Estadístico)) + ge
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 
-gráfico_estadistico_zoom <- ggplot(data = datosgráfico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
+grafico_estadistico_zoom <- ggplot(data = datosgrafico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados$media_estadístico, col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_estadistico, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
         scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
         xlab("x") + ylab("f(x)") +
@@ -60,7 +61,7 @@ gráfico_estadistico_zoom <- ggplot(data = datosgráfico, aes(x = Estadístico))
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
 
-gráfico_mediamuestral <- ggplot(data = datosgráfico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
+grafico_mediamuestral <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados$media_mediamuestral, col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
@@ -73,7 +74,7 @@ gráfico_mediamuestral <- ggplot(data = datosgráfico, aes(x = mediamuestral)) +
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 
-gráfico_mediamuestral_zoom <- ggplot(data = datosgráfico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
+grafico_mediamuestral_zoom <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
         ggtitle("Distribución en el Muestreo de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados$media_mediamuestral, col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
@@ -85,7 +86,6 @@ gráfico_mediamuestral_zoom <- ggplot(data = datosgráfico, aes(x = mediamuestra
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
-
 
 
 
