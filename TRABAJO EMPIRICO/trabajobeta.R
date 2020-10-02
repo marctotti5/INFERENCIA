@@ -1,5 +1,7 @@
 
 library(tidyverse)
+library(e1071)
+library(moments)
 
 # 1. Creamos las muestras, evaluamos el estadístico en ellas, así como la media muestral
 muestreo <- function(alpha, beta){
@@ -23,12 +25,18 @@ muestreo <- function(alpha, beta){
         colnames(lista[[5]]) <- c("Muestra", "Estadístico")
         lista[[6]] <- mean(lista[[4]][, 2])
         lista[[7]] <- sd(lista[[4]][, 2])
-        lista[[8]] <- mean(lista[[5]][, 2])
-        lista[[9]] <- sd(lista[[5]][, 2])
+        lista[[8]] <- IQR(lista[[4]][, 2])
+        lista[[9]] <- mad(lista[[4]][, 2])
+        lista[[10]] <- moments::kurtosis(lista[[4]][, 2])
+        lista[[11]] <- e1071::skewness(lista[[4]][, 2])
+        lista[[12]] <- mean(lista[[5]][, 2])
+        lista[[13]] <- sd(lista[[5]][, 2])
         names(lista) <- c("tabla_muestras", "media_poblacional", "varianza_poblacional", "media_muestral", 
-                          "estadistico", "media_mediamuestral", "desviacion_mediamuestral", "media_estadistico", "desviacion_estadistico")
+                          "estadistico", "media_mediamuestral", "desviacion_mediamuestral", "IQR_mediamuestral", "MAD_mediamuestral", 
+                          "kurtosis_mediamuestral", "asimetria_mediamuestral", "media_estadistico", "desviacion_estadistico")
         lista
 }
+
 
 
 resultados <- muestreo(alpha = 2, beta = 2)
@@ -94,3 +102,4 @@ grafico_mediamuestral_zoom <- ggplot(data = datosgrafico, aes(x = mediamuestral)
 
 
 # 4. Comparación de la Media Muestral y nuestro Estimador (el que menor varianza o desviación tenga, será un mejor estimador)
+  
