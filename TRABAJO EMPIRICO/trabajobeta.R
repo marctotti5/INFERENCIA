@@ -19,12 +19,14 @@ muestreo <- function(alpha, beta){
                 tabla_muestras[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
                 colnames(tabla_muestras)[j] <- as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
                 colnames(lista[[6]])[j] <-  as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
-                lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], probs = c(0.6)) + quantile(tabla_muestras[, j], probs = c(0.4)))
+                lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], probs = c(0.6)) + 
+                                                quantile(tabla_muestras[, j], probs = c(0.4)))
         }
         lista[[1]] <- tabla_muestras
         lista[[2]] <- media_poblacional
         lista[[3]] <- varianza_poblacional
-        lista[[4]] <- data.frame(Muestra = names(colMeans(tabla_muestras)), mediamuestral = unname(colMeans(tabla_muestras))) 
+        lista[[4]] <- data.frame(Muestra = names(colMeans(tabla_muestras)), 
+                                 mediamuestral = unname(colMeans(tabla_muestras))) 
         lista[[5]] <- data.frame(Estimador = "Media Muestral", 
                                  Media = mean(lista[[4]][, 2]),
                                  Mediana = median(lista[[4]][, 2]),
@@ -44,8 +46,10 @@ muestreo <- function(alpha, beta){
                                  Curtosis = moments::kurtosis(lista[[6]][, 2]), 
                                  Asimetría = e1071::skewness(lista[[6]][, 2]))
         lista[[8]] <- rbind(lista[[5]], lista[[7]])
-        names(lista) <- c("tabla_muestras", "media_poblacional", "varianza_poblacional", "media_muestral", 
-                          "medidas_media_muestral", "estadistico", "medidas_estadistico", "tabla_comparacion")
+        names(lista) <- c("tabla_muestras", "media_poblacional", 
+                          "varianza_poblacional", "media_muestral", 
+                          "medidas_media_muestral", "estadistico", 
+                          "medidas_estadistico", "tabla_comparacion")
         lista
 }
 

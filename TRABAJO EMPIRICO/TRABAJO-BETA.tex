@@ -36,8 +36,8 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-  pdftitle={DISTRIBUCIONBETA},
-  pdfauthor={Yo},
+  pdftitle={Entrega 1: Creación de un Estimador de la media poblacional},
+  pdfauthor={Daniel Aramburu, Guillermo Palomo, Jorge Salas y Marc Pastor},
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
@@ -99,132 +99,99 @@
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{amsmath}
-\usepackage{caption}
 
-\title{DISTRIBUCIONBETA}
-\author{Yo}
-\date{10/2/2020}
+\title{Entrega 1: Creación de un Estimador de la media poblacional}
+\author{Daniel Aramburu, Guillermo Palomo, Jorge Salas y Marc Pastor}
+\date{9 de Octubre de 2020}
 
 \begin{document}
 \maketitle
 
+\hypertarget{introducciuxf3n}{%
+\section{1. Introducción}\label{introducciuxf3n}}
+
+El objetivo de este trabajo es crear un Estadístico para estimar la
+media poblacional de una distribución continua determinada (que no sea
+la Distribución Normal ni la Exponencial) y comparar su rendimiento con
+la media muestral (que es el estadístico más usado para aproximar la
+media poblacional). En nuestro caso hemos optado por la distribución
+Beta (con alpha y beta = 2) debido a que su función de densidad es
+simétrica y centrada, y nos parece que es sencillo encontrar un
+Estadístico fiable para aproximar su media poblacional.
+
+\hypertarget{distribuciuxf3n-beta}{%
+\section{2. Distribución Beta}\label{distribuciuxf3n-beta}}
+
+La Distribución Beta es una distribución continua que depende de dos
+parámetros (alpha y beta) y que toma valores en el intervalo {[}0,1{]}.
+Debido a que solo está definida en {[}0,1{]} es una distribución muy
+usada para modelizar la probabilidad de que ocurra un evento, aunque
+también es usada para describir datos empíricos (debido a la variedad de
+formas que puede adoptar en función de los valores que tomen sus
+parámetros) y para modelar la fiabilidad de un sistema. Su función de
+densidad es distinta de cero solo cuando 0 \textless{} x \textless{} 1 y
+es la siguiente:
+
+\begin{center}\includegraphics[width=175px]{C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/FUNCIÓN DE DENSIDAD/DENSIDAD1} \end{center}
+
+También se puede escribir como:
+
+\hypertarget{forma-de-la-distribuciuxf3n-beta}{%
+\subsection{2.0 Forma de la distribución
+Beta}\label{forma-de-la-distribuciuxf3n-beta}}
+
+\begin{center}\includegraphics[width=175px]{C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/Beta_distribution} \end{center}
+
+\hypertarget{momentos}{%
+\subsection{2.1 Momentos}\label{momentos}}
+
+\hypertarget{funciuxf3n-generadora-de-momentos}{%
+\subsection{2.2 Función Generadora de
+Momentos}\label{funciuxf3n-generadora-de-momentos}}
+
+\hypertarget{creaciuxf3n-del-estaduxedstico-para-estimar-la-media-poblacional}{%
+\section{3. Creación del Estadístico para estimar la Media
+Poblacional}\label{creaciuxf3n-del-estaduxedstico-para-estimar-la-media-poblacional}}
+
+En primer lugar hemos creado la función \emph{muestreo}. Esta función es
+la base de toda la práctica, ya que nos permite crear muestras
+aleatorias, calcular nuestro Estadístico, y la media muestral en cada
+una de esas 40 muestras, etc.
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## -- Attaching packages --------------------------------------------------------------------------------- tidyverse 1.3.0 --
-\end{verbatim}
-
-\begin{verbatim}
-## v ggplot2 3.3.2     v purrr   0.3.4
-## v tibble  3.0.1     v dplyr   1.0.0
-## v tidyr   1.1.0     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.5.0
-\end{verbatim}
-
-\begin{verbatim}
-## -- Conflicts ------------------------------------------------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(e1071)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'e1071' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(moments)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## 
-## Attaching package: 'moments'
-\end{verbatim}
-
-\begin{verbatim}
-## The following objects are masked from 'package:e1071':
-## 
-##     kurtosis, moment, skewness
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(gt)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'gt' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(ggpubr)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'ggpubr' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(ggplotify)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'ggplotify' was built under R version 4.0.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{library}\NormalTok{(grid)}
-\CommentTok{# 1. Creamos las muestras, evaluamos el estadístico en ellas, así como la media muestral}
 
 \NormalTok{muestreo <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(alpha, beta)\{}
 \NormalTok{        lista <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
-\NormalTok{        tabla_muestras <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{ncol =} \DecValTok{40}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{10}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{()}
+\NormalTok{        tabla_muestras <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{ncol =} \DecValTok{40}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{10}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{() }
 \NormalTok{        lista[[}\DecValTok{6}\NormalTok{]] <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{ncol =} \DecValTok{40}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{1}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{()}
 \NormalTok{        media_poblacional <-}\StringTok{ }\NormalTok{alpha }\OperatorTok{/}\StringTok{ }\NormalTok{(alpha }\OperatorTok{+}\StringTok{ }\NormalTok{beta)}
 \NormalTok{        varianza_poblacional <-}\StringTok{ }\NormalTok{alpha }\OperatorTok{*}\StringTok{ }\NormalTok{beta }\OperatorTok{/}\StringTok{ }\NormalTok{(((alpha }\OperatorTok{+}\StringTok{ }\NormalTok{beta) }\OperatorTok{^}\StringTok{ }\DecValTok{2}\NormalTok{ ) }\OperatorTok{*}\StringTok{ }\NormalTok{(alpha }\OperatorTok{+}\StringTok{ }\NormalTok{beta }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{))}
         \ControlFlowTok{for}\NormalTok{(j }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{40}\NormalTok{)\{}
                 \KeywordTok{set.seed}\NormalTok{(j)}
 \NormalTok{                tabla_muestras[, j] <-}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DataTypeTok{shape1 =}\NormalTok{ alpha, }\DataTypeTok{shape2 =}\NormalTok{ beta)}
-                \KeywordTok{colnames}\NormalTok{(tabla_muestras)[j] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{gsub}\NormalTok{(}\StringTok{"V"}\NormalTok{, }\StringTok{""}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(tabla_muestras)[j]))}
-                \KeywordTok{colnames}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]])[j] <-}\StringTok{  }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{gsub}\NormalTok{(}\StringTok{"V"}\NormalTok{, }\StringTok{""}\NormalTok{, }\KeywordTok{colnames}\NormalTok{(tabla_muestras)[j]))}
-\NormalTok{                lista[[}\DecValTok{6}\NormalTok{]][, j] <-}\StringTok{ }\FloatTok{0.5}\OperatorTok{*}\NormalTok{(}\KeywordTok{quantile}\NormalTok{(tabla_muestras[, j], }\DataTypeTok{probs =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.6}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{quantile}\NormalTok{(tabla_muestras[, j], }\DataTypeTok{probs =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.4}\NormalTok{)))}
+                \KeywordTok{colnames}\NormalTok{(tabla_muestras)[j] <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{gsub}\NormalTok{(}\StringTok{"V"}\NormalTok{, }\StringTok{""}\NormalTok{, }
+                                                               \KeywordTok{colnames}\NormalTok{(tabla_muestras)[j]))}
+                \KeywordTok{colnames}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]])[j] <-}\StringTok{  }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{gsub}\NormalTok{(}\StringTok{"V"}\NormalTok{, }\StringTok{""}\NormalTok{, }
+                                                            \KeywordTok{colnames}\NormalTok{(tabla_muestras)[j]))}
+\NormalTok{                lista[[}\DecValTok{6}\NormalTok{]][, j] <-}\StringTok{ }\FloatTok{0.5}\OperatorTok{*}\NormalTok{(}\KeywordTok{quantile}\NormalTok{(tabla_muestras[, j], }
+                                                 \DataTypeTok{probs =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.6}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{                                                }\KeywordTok{quantile}\NormalTok{(tabla_muestras[, j], }
+                                                         \DataTypeTok{probs =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.4}\NormalTok{)))}
 \NormalTok{        \}}
 \NormalTok{        lista[[}\DecValTok{1}\NormalTok{]] <-}\StringTok{ }\NormalTok{tabla_muestras}
 \NormalTok{        lista[[}\DecValTok{2}\NormalTok{]] <-}\StringTok{ }\NormalTok{media_poblacional}
 \NormalTok{        lista[[}\DecValTok{3}\NormalTok{]] <-}\StringTok{ }\NormalTok{varianza_poblacional}
-\NormalTok{        lista[[}\DecValTok{4}\NormalTok{]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Muestra =} \KeywordTok{names}\NormalTok{(}\KeywordTok{colMeans}\NormalTok{(tabla_muestras)), }\DataTypeTok{mediamuestral =} \KeywordTok{unname}\NormalTok{(}\KeywordTok{colMeans}\NormalTok{(tabla_muestras))) }
-\NormalTok{        lista[[}\DecValTok{5}\NormalTok{]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{estimador =} \StringTok{"media_muestral"}\NormalTok{, }
+\NormalTok{        lista[[}\DecValTok{4}\NormalTok{]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Muestra =} \KeywordTok{names}\NormalTok{(}\KeywordTok{colMeans}\NormalTok{(tabla_muestras)), }
+                                 \DataTypeTok{mediamuestral =} \KeywordTok{unname}\NormalTok{(}\KeywordTok{colMeans}\NormalTok{(tabla_muestras))) }
+\NormalTok{        lista[[}\DecValTok{5}\NormalTok{]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Estimador =} \StringTok{"Media Muestral"}\NormalTok{, }
                                  \DataTypeTok{Media =} \KeywordTok{mean}\NormalTok{(lista[[}\DecValTok{4}\NormalTok{]][, }\DecValTok{2}\NormalTok{]),}
                                  \DataTypeTok{Mediana =} \KeywordTok{median}\NormalTok{(lista[[}\DecValTok{4}\NormalTok{]][, }\DecValTok{2}\NormalTok{]),}
                                  \DataTypeTok{SD =} \KeywordTok{sd}\NormalTok{(lista[[}\DecValTok{4}\NormalTok{]][, }\DecValTok{2}\NormalTok{]), }
@@ -234,7 +201,7 @@
 \NormalTok{                                 Asimetrí}\DataTypeTok{a =}\NormalTok{ e1071}\OperatorTok{::}\KeywordTok{skewness}\NormalTok{(lista[[}\DecValTok{4}\NormalTok{]][, }\DecValTok{2}\NormalTok{]))}
 \NormalTok{        lista[[}\DecValTok{6}\NormalTok{]] <-}\StringTok{ }\KeywordTok{gather}\NormalTok{(}\KeywordTok{as.data.frame}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]])) }
         \KeywordTok{colnames}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]]) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Muestra"}\NormalTok{, }\StringTok{"Estadístico"}\NormalTok{)}
-\NormalTok{        lista[[}\DecValTok{7}\NormalTok{]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{estimador =} \StringTok{"estadístico"}\NormalTok{,}
+\NormalTok{        lista[[}\DecValTok{7}\NormalTok{]] <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{Estimador =} \StringTok{"Estadístico"}\NormalTok{,}
                                  \DataTypeTok{Media =} \KeywordTok{mean}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]][, }\DecValTok{2}\NormalTok{]),}
                                  \DataTypeTok{Mediana =} \KeywordTok{median}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]][, }\DecValTok{2}\NormalTok{]),}
                                  \DataTypeTok{SD =} \KeywordTok{sd}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]][, }\DecValTok{2}\NormalTok{]), }
@@ -243,12 +210,12 @@
                                  \DataTypeTok{Curtosis =}\NormalTok{ moments}\OperatorTok{::}\KeywordTok{kurtosis}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]][, }\DecValTok{2}\NormalTok{]), }
 \NormalTok{                                 Asimetrí}\DataTypeTok{a =}\NormalTok{ e1071}\OperatorTok{::}\KeywordTok{skewness}\NormalTok{(lista[[}\DecValTok{6}\NormalTok{]][, }\DecValTok{2}\NormalTok{]))}
 \NormalTok{        lista[[}\DecValTok{8}\NormalTok{]] <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(lista[[}\DecValTok{5}\NormalTok{]], lista[[}\DecValTok{7}\NormalTok{]])}
-        \KeywordTok{names}\NormalTok{(lista) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"tabla_muestras"}\NormalTok{, }\StringTok{"media_poblacional"}\NormalTok{, }\StringTok{"varianza_poblacional"}\NormalTok{, }\StringTok{"media_muestral"}\NormalTok{, }
-                          \StringTok{"medidas_media_muestral"}\NormalTok{, }\StringTok{"estadistico"}\NormalTok{, }\StringTok{"medidas_estadistico"}\NormalTok{, }\StringTok{"tabla_comparacion"}\NormalTok{)}
+        \KeywordTok{names}\NormalTok{(lista) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"tabla_muestras"}\NormalTok{, }\StringTok{"media_poblacional"}\NormalTok{, }
+                          \StringTok{"varianza_poblacional"}\NormalTok{, }\StringTok{"media_muestral"}\NormalTok{, }
+                          \StringTok{"medidas_media_muestral"}\NormalTok{, }\StringTok{"estadistico"}\NormalTok{, }
+                          \StringTok{"medidas_estadistico"}\NormalTok{, }\StringTok{"tabla_comparacion"}\NormalTok{)}
 \NormalTok{        lista}
 \NormalTok{\}}
-
-
 
 \NormalTok{resultados <-}\StringTok{ }\KeywordTok{muestreo}\NormalTok{(}\DataTypeTok{alpha =} \DecValTok{2}\NormalTok{, }\DataTypeTok{beta =} \DecValTok{2}\NormalTok{)}
 
@@ -256,82 +223,46 @@
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Joining, by = "Muestra"
-\end{verbatim}
+\hypertarget{evaluaciuxf3n-de-nuestro-estaduxedstico}{%
+\section{4. Evaluación de nuestro
+Estadístico}\label{evaluaciuxf3n-de-nuestro-estaduxedstico}}
+
+\hypertarget{tabla-de-medidas-falta-pasar-a-formato-leible-por-un-pdf-es-decir-eliminar-lo-de-gt}{%
+\subsection{4.1 Tabla de Medidas (falta pasar a formato leible por un
+pdf, es decir eliminar lo de
+gt)}\label{tabla-de-medidas-falta-pasar-a-formato-leible-por-un-pdf-es-decir-eliminar-lo-de-gt}}
+
+\newpage
+
+\hypertarget{histogramas}{%
+\subsection{4.2 Histogramas}\label{histogramas}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{library}\NormalTok{(gt)}
-\KeywordTok{library}\NormalTok{(tidyverse)}
-\KeywordTok{gt}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ resultados}\OperatorTok{$}\NormalTok{tabla_comparacion) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tab_header}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Hola em dic Marc"}\NormalTok{)}
+\NormalTok{grafico_estadistico_histogram <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ datosgrafico, }
+                                        \KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Estadístico)) }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{geom_histogram}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"lightblue"}\NormalTok{, }\DataTypeTok{binwidth =} \FloatTok{0.05}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Histograma de nuestro Estadístico"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{geom_vline}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ resultados[[}\DecValTok{7}\NormalTok{]]}\OperatorTok{$}\NormalTok{Media, }\DataTypeTok{col =} \StringTok{"Estimador"}\NormalTok{), }
+                   \DataTypeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{        }\KeywordTok{geom_vline}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{xintercept =}\NormalTok{ resultados}\OperatorTok{$}\NormalTok{media_poblacional,  }
+                       \DataTypeTok{col =} \StringTok{"Media Poblacional"}\NormalTok{), }\DataTypeTok{size =} \DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{name =} \StringTok{""}\NormalTok{, }
+                           \DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"Media Poblacional"}\NormalTok{ =}\StringTok{ "black"}\NormalTok{, }
+                                      \DataTypeTok{Estimador =} \StringTok{"red"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{xlab}\NormalTok{(}\StringTok{"x"}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{ylab}\NormalTok{(}\StringTok{"f(x)"}\NormalTok{) }\OperatorTok{+}
+\StringTok{        }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{legend.position =} \StringTok{"top"}\NormalTok{,}
+              \DataTypeTok{legend.text =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{14}\NormalTok{),}
+              \DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{12}\NormalTok{),}
+              \DataTypeTok{axis.text.y =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{12}\NormalTok{),}
+              \DataTypeTok{axis.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{13}\NormalTok{, }\DataTypeTok{face =} \StringTok{"bold"}\NormalTok{), }
+              \DataTypeTok{plot.title =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{size =} \DecValTok{18}\NormalTok{, }\DataTypeTok{face =} \StringTok{'bold'}\NormalTok{, }
+                                        \DataTypeTok{hjust =} \FloatTok{0.5}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{xlim}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{grafico_estadistico_histogram}
 \end{Highlighting}
 \end{Shaded}
 
-\captionsetup[table]{labelformat=empty,skip=1pt}
-\begin{longtable}{lrrrrrrr}
-\caption*{
-\large Hola em dic Marc\\ 
-\small \\ 
-} \\ 
-\toprule
-estimador & Media & Mediana & SD & IQR & MAD & Curtosis & Asimetría \\ 
-\midrule
-media\_muestral & 0.5072706 & 0.5012344 & 0.07211760 & 0.08862303 & 0.06388053 & 3.077518 & 0.3099279 \\ 
-estadístico & 0.5035930 & 0.5041133 & 0.08791211 & 0.13532182 & 0.09725723 & 2.656788 & 0.2748998 \\ 
-\bottomrule
-\end{longtable}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{kableExtra}\OperatorTok{::}\KeywordTok{kable}\NormalTok{(resultados}\OperatorTok{$}\NormalTok{tabla_comparacion, }\DataTypeTok{format =} \StringTok{"latex"}\NormalTok{, }\DataTypeTok{booktabs =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{longtable =} \OtherTok{TRUE}\NormalTok{) }
-\end{Highlighting}
-\end{Shaded}
-
-\begin{longtable}{lrrrrrrr}
-\toprule
-estimador & Media & Mediana & SD & IQR & MAD & Curtosis & Asimetría\\
-\midrule
-media\_muestral & 0.5072706 & 0.5012344 & 0.0721176 & 0.0886230 & 0.0638805 & 3.077518 & 0.3099279\\
-estadístico & 0.5035930 & 0.5041133 & 0.0879121 & 0.1353218 & 0.0972572 & 2.656788 & 0.2748998\\
-\bottomrule
-\end{longtable}
-
-\hypertarget{r-markdown}{%
-\subsection{R Markdown}\label{r-markdown}}
-
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see \url{http://rmarkdown.rstudio.com}.
-
-When you click the \textbf{Knit} button a document will be generated
-that includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{summary}\NormalTok{(cars)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
-\end{verbatim}
-
-\hypertarget{including-plots}{%
-\subsection{Including Plots}\label{including-plots}}
-
-You can also embed plots, for example:
-
-\includegraphics{TRABAJO-BETA_files/figure-latex/pressure-1.pdf}
-
-Note that the \texttt{echo\ =\ FALSE} parameter was added to the code
-chunk to prevent printing of the R code that generated the plot.
+\begin{center}\includegraphics{TRABAJO-BETA_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 \end{document}
