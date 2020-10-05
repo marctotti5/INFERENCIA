@@ -131,7 +131,7 @@ grafico_estadistico_density_zoom <- ggplot(data = datosgrafico, aes(x = Estadís
 # 3. Gráficos media muestral: analizar y  calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
 ## 3.0 Medidas de centralización, dispersión y forma de nuestro estimador
 tabla_medidas_media_muestral <- gt(resultados$medidas_media_muestral[-1]) %>% 
-        tab_header(title = md("**Estadístico**")) %>% 
+        tab_header(title = md("**Media Muestral**")) %>% 
         tab_spanner(label = md("***Medidas de Centralización***"), columns = c(1, 2)) %>% 
         tab_spanner(label = md("***Medidas de Dispersión***"), columns = c(3:5)) %>% 
         tab_spanner(label = md("***Medidas de Forma***"), columns = c(6, 7)) %>% 
@@ -203,8 +203,8 @@ grafico_mediamuestral_density_zoom <- ggplot(data = datosgrafico, aes(x = mediam
 
 
 # 4. Comparación de la Media Muestral y nuestro Estimador (el que menor varianza o desviación tenga, será un mejor estimador)
-tabla_medidas_media_muestral <- gt(resultados$tabla_comparacion) %>% 
-        tab_header(title = md("**Estadístico**")) %>% 
+tabla_medidas_comparacion <- gt(resultados$tabla_comparacion) %>% 
+        tab_header(title = md("**Comparativa de Estimadores**")) %>% 
         tab_spanner(label = md("***Medidas de Centralización***"), columns = c(2, 3)) %>% 
         tab_spanner(label = md("***Medidas de Dispersión***"), columns = c(4:6)) %>% 
         tab_spanner(label = md("***Medidas de Forma***"), columns = c(7, 8))

@@ -30,7 +30,7 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 \newpage
 ### Propiedades de la función Beta
 La función beta cumple las siguientes propiedades (las usaremos para encontrar su función generadora de momentos, etc):
-```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "263px", fig.align = "center"}
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/FUNCIÓN DE DENSIDAD/propiedadesfuncionbeta.jpg")
 ```
 
@@ -38,13 +38,22 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 ## 2.0 Forma de la distribución Beta
 Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida)
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
-library(knitr)
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/Beta_distribution.png")
 ```
+
+\newpage
 ## 2.1 Momentos
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "260px", fig.align = "center"}
+library(knitr)
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/MOMENTOS/momentos.jpg")
+```
 
 ## 2.2 Función Generadora de Momentos
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "350px", fig.align = "center", out.height = "350px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/FUNCIÓN GENERADORA DE MOMENTOS/funciongeneradorabeta.jpg")
+```
 
+\newpage
 # 3. Creación del Estadístico para estimar la Media Poblacional
 En primer lugar hemos creado la función *muestreo*. Esta función es la base de toda la práctica, ya que nos permite crear muestras aleatorias, calcular nuestro Estadístico, y la media muestral en cada una de esas 40 muestras, etc. 
 ```{r, message = FALSE, warning = FALSE}
@@ -110,15 +119,16 @@ resultados <- muestreo(alpha = 2, beta = 2)
 datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 ```
 
+\newpage
 # 4. Evaluación de nuestro Estadístico
-## 4.1 Tabla de Medidas (falta pasar a formato leible por un pdf, es decir eliminar lo de gt)
-```{r}
+## 4.1 Tabla de Medidas 
 
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/MEDIDAS/medidasestadistico2.png")
 ```
 
-\newpage
 ## 4.2 Histogramas
-```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
 grafico_estadistico_histogram <- ggplot(data = datosgrafico, 
                                         aes(x = Estadístico)) + 
         geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
@@ -139,5 +149,152 @@ grafico_estadistico_histogram <- ggplot(data = datosgrafico,
               plot.title = element_text(size = 18, face = 'bold', 
                                         hjust = 0.5)) + 
         xlim(0, 1)
+```
+
+\newpage
+Este es el histograma resultante:
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
 grafico_estadistico_histogram
 ```
+
+
+
+## 4.3 Gráficos de Densidad
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 7, fig.height = 4}
+grafico_estadistico_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
+        geom_density(fill = "lightblue") + 
+        ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
+        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), 
+                   linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black", 
+                                      Estimador = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) + 
+        xlim(0, 1)
+```
+
+\newpage
+Este es el gráfico de densidad resultante
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 7, fig.height = 4}
+grafico_estadistico_density
+```
+
+\newpage
+# 5. Evaluación de la Media Muestral
+## 5.1 Tabla de Medidas 
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/MEDIDAS/medidasmediamuestral.png")
+```
+
+## 5.2 Histogramas
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
+grafico_mediamuestral_histogram <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
+        geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
+        ggtitle("Histograma de la Media Muestral") + 
+        geom_vline(aes(xintercept = resultados[[5]]$Media, 
+                       col = "Media Muestral"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black",
+                                      "Media Muestral" = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) + xlim(0, 1)
+```
+
+\newpage
+Este es el gráfico resultante.
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
+grafico_mediamuestral_histogram
+```
+
+
+\newpage
+## 5.3 Gráficos de densidad
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 22, fig.height = 4}
+grafico_mediamuestral_density <- ggplot(data = datosgrafico, 
+                                        aes(x = mediamuestral)) + 
+        geom_density(fill = "lightblue") + 
+        ggtitle("Distribución en el Muestreo de la Media Muestral") + 
+        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), 
+                   linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black", 
+                                      "Media Muestral" = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) + 
+        xlim(0, 1)
+```
+
+Este es el gráfico resultando:
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
+grafico_mediamuestral_density
+```
+
+\newpage
+# 6. Comparando nuestro estadístico con la media muestral
+## 6.1 Tabla de Medidas
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/MEDIDAS/medidascomparativa2.png")
+```
+
+## 6.2 Gráficos Comparativos
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
+datos_grafico_comparativo <- gather(datosgrafico[, -1])
+colnames(datos_grafico_comparativo) <- c("Estimador", "Valor")
+datos_grafico_comparativo[, 1] <- gsub("mediamuestral", "Media Muestral", 
+                                       datos_grafico_comparativo[, 1])
+cutoff <- data.frame( yintercept = resultados$media_poblacional, 
+                      cutoff = factor(50) )
+
+grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo, 
+                                      aes(x = Estimador, y = Valor, 
+                                          fill = Estimador, 
+                                          color = Estimador)) + 
+        geom_boxplot(alpha = 0.5) + 
+        geom_jitter() + 
+        ggtitle("Diagrama de Caja: Estadístico vs Media Muestral") + 
+        theme(legend.position = "none",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) 
+```
+
+\newpage
+Ahora observamos los gráficos que hemos creado:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "350px", fig.align = "center", out.height = "350px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/PLOTS/boxplotcomparativo.png")
+```
+
+\newpage
+Aquí tenim un altre gràfic
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "550px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/PLOTS/densitycomparativo.png")
+```
+
