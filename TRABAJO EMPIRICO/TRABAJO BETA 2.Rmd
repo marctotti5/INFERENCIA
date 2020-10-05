@@ -18,16 +18,31 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 ```
 
 También se puede escribir como:
-```{r}
-
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "175px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/FUNCIÓN DE DENSIDAD/funciondensidad2.jpg")
 ```
 
+Dónde la función Beta es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "263px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/FUNCIÓN DE DENSIDAD/funcionbeta.jpg")
+```
+
+\newpage
+### Propiedades de la función Beta
+La función beta cumple las siguientes propiedades (las usaremos para encontrar su función generadora de momentos, etc):
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "263px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/LATEX Y FÓRMULAS/FUNCIÓN DE DENSIDAD/propiedadesfuncionbeta.jpg")
+```
+
+
 ## 2.0 Forma de la distribución Beta
-```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "175px", fig.align = "center"}
+Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida)
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
 library(knitr)
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/Beta_distribution.png")
 ```
 ## 2.1 Momentos
+
 ## 2.2 Función Generadora de Momentos
 
 # 3. Creación del Estadístico para estimar la Media Poblacional
