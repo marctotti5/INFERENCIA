@@ -129,63 +129,26 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 
 ## 4.2 Histogramas
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
-grafico_estadistico_histogram <- ggplot(data = datosgrafico, 
-                                        aes(x = Estadístico)) + 
+grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
         geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
+        geom_density(color = "blue", size = 0.75) +
         ggtitle("Histograma de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), 
-                   linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  
-                       col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", 
-                           values = c("Media Poblacional" = "black", 
-                                      Estimador = "red")) + 
+        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
         xlab("x") + ylab("f(x)") +
         theme(legend.position = "top",
               legend.text = element_text(size = 14),
               axis.text.x = element_text(size = 12),
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', 
-                                        hjust = 0.5)) + 
-        xlim(0, 1)
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 ```
 
 \newpage
 Este es el histograma resultante:
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
-grafico_estadistico_histogram
-```
-
-
-
-## 4.3 Gráficos de Densidad
-```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 7, fig.height = 4}
-grafico_estadistico_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
-        geom_density(fill = "lightblue") + 
-        ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), 
-                   linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  
-                       col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", 
-                           values = c("Media Poblacional" = "black", 
-                                      Estimador = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', 
-                                        hjust = 0.5)) + 
-        xlim(0, 1)
-```
-
-\newpage
-Este es el gráfico de densidad resultante
-```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 7, fig.height = 4}
-grafico_estadistico_density
+grafico_estadistico_histogram_density
 ```
 
 \newpage
@@ -195,63 +158,34 @@ grafico_estadistico_density
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/MEDIDAS/medidasmediamuestral.png")
 ```
 
+## Comparación con la varianza poblacional
+
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/MEDIDAS/varianzamuestralpoblacional.png")
+```
+
 ## 5.2 Histogramas
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
-grafico_mediamuestral_histogram <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
+grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
         geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
+        geom_density(size = 0.75, col = "blue") +
         ggtitle("Histograma de la Media Muestral") + 
-        geom_vline(aes(xintercept = resultados[[5]]$Media, 
-                       col = "Media Muestral"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  
-                       col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", 
-                           values = c("Media Poblacional" = "black",
-                                      "Media Muestral" = "red")) + 
+        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
         xlab("x") + ylab("f(x)") +
         theme(legend.position = "top",
               legend.text = element_text(size = 14),
               axis.text.x = element_text(size = 12),
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', 
-                                        hjust = 0.5)) + xlim(0, 1)
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 ```
 
 \newpage
 Este es el gráfico resultante.
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
-grafico_mediamuestral_histogram
-```
-
-
-\newpage
-## 5.3 Gráficos de densidad
-```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 22, fig.height = 4}
-grafico_mediamuestral_density <- ggplot(data = datosgrafico, 
-                                        aes(x = mediamuestral)) + 
-        geom_density(fill = "lightblue") + 
-        ggtitle("Distribución en el Muestreo de la Media Muestral") + 
-        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), 
-                   linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  
-                       col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", 
-                           values = c("Media Poblacional" = "black", 
-                                      "Media Muestral" = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', 
-                                        hjust = 0.5)) + 
-        xlim(0, 1)
-```
-
-Este es el gráfico resultando:
-```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
-grafico_mediamuestral_density
+grafico_mediamuestral_histogram_density
 ```
 
 \newpage
@@ -287,7 +221,7 @@ grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo,
 ```
 
 \newpage
-Ahora observamos los gráficos que hemos creado:
+Ahora observamos los gráficos que hemos creado: 
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "350px", fig.align = "center", out.height = "350px"}
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/PLOTS/boxplotcomparativo.png")
 ```
@@ -295,6 +229,6 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 \newpage
 Aquí tenim un altre gràfic
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "550px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/PLOTS/densitycomparativo.png")
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/PLOTS/graficocomparativo_density.png")
 ```
 

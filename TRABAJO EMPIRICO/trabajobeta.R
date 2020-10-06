@@ -70,8 +70,9 @@ tabla_medidas_estadistico <- gt(resultados$medidas_estadistico[-1]) %>%
 
 ## 2.1 Histogramas
 
-grafico_estadistico_histogram <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
+grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
         geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
+        geom_density(color = "blue", size = 0.75) +
         ggtitle("Histograma de nuestro Estadístico") + 
         geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
@@ -83,49 +84,6 @@ grafico_estadistico_histogram <- ggplot(data = datosgrafico, aes(x = Estadístic
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
-
-grafico_estadistico_histogram_zoom <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
-        geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
-        ggtitle("Histograma de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
-
-
-## 2.2 Gráficos de densidad
-
-grafico_estadistico_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
-        ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
-
-grafico_estadistico_density_zoom <- ggplot(data = datosgrafico, aes(x = Estadístico)) + geom_density(fill = "lightblue") + 
-        ggtitle("Distribución en el Muestreo de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
 
 
 # 3. Gráficos media muestral: analizar y  calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
@@ -138,13 +96,17 @@ tabla_medidas_media_muestral <- gt(resultados$medidas_media_muestral[-1]) %>%
         tab_options(table.width = 5) 
 
 # Cuando n tiende a infinito, se supone que la varianza de la media muestral será sigma^2/n
-resultados$varianza_poblacional / 40
-resultados$medidas_media_muestral$SD^2
-resultados[[4]]
+varianzamediamuestral_data <- data.frame(varianzamediamuestral_real = resultados$medidas_media_muestral$SD^2, 
+           varianzamediamuestral_teorica = resultados$varianza_poblacional / 10)
+colnames(varianzamediamuestral_data) <- c("Valor Obtenido", "Valor Teórico")
+tabla_varianza_muestral_poblacional <- gt(varianzamediamuestral_data) %>% 
+        tab_header(title = md("Varianza de la Media Muestral")) 
+
 
 ## 3.1 Histogramas
-grafico_mediamuestral_histogram <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
+grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
         geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
+        geom_density(size = 0.75, col = "blue") +
         ggtitle("Histograma de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
@@ -156,51 +118,6 @@ grafico_mediamuestral_histogram <- ggplot(data = datosgrafico, aes(x = mediamues
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
-
-grafico_mediamuestral_histogram_zoom <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
-        geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
-        ggtitle("Histograma de la Media Muestral") + 
-        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
-
-
-## 3.2 Gráficos de Densidad
-
-grafico_mediamuestral_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
-        ggtitle("Distribución en el Muestreo de la Media Muestral") + 
-        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
-
-grafico_mediamuestral_density_zoom <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + geom_density(fill = "lightblue") + 
-        ggtitle("Distribución en el Muestreo de la Media Muestral") + 
-        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
-        xlab("x") + ylab("f(x)") +
-        theme(legend.position = "top",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0.35, 0.65)
-
-
 
 # 4. Comparación de la Media Muestral y nuestro Estimador (el que menor varianza o desviación tenga, será un mejor estimador)
 tabla_medidas_comparacion <- gt(resultados$tabla_comparacion) %>% 
@@ -223,9 +140,6 @@ grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo, aes(x = 
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
 
-grafico_comparativo_density <- ggarrange(grafico_estadistico_density,  
-                                         grafico_mediamuestral_density, 
+grafico_comparativo_histogram_density <- ggarrange(grafico_estadistico_histogram_density,  
+                                         grafico_mediamuestral_histogram_density, 
                                          nrow = 2)
-grafico_comparativo_histogram <- ggarrange(grafico_estadistico_histogram,  
-                                           grafico_mediamuestral_histogram, 
-                                           nrow = 2)
