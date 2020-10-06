@@ -62,6 +62,14 @@ datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 
 # 2. Gráficos sobre nuestro estimador: analizar y calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
 ## 2.0 Medidas de centralización, dispersión y forma de nuestro estimador
+#Para comparar nuestro estadístico con la media muestral usaremos las siguientes medidas de dispersión, centralización y forma:
+#Media:en nuestro estadístico el promedio es aproximandamente la media poblacional,ya que nos da 0.5
+#Mediana:como podemos observar la mediana esta centrada ya que su valor es 0.5041133
+#Curtosis:se parece a una normal pero es ligeramente platicúrtica(menos apuntada y con colas menos gruesas que la normal)
+#IQR:la dispersión entre el cuartil 3 y 1 es muy pequeña, por lo que podemos concretar que la mayoría de los datos están concentrados en este rango.
+#SD:la desviación típica de nuestro estadístico es muy pequeña
+#MAD:la desviación absoluta mediana 
+#Asimetría:es poco asimétrica a la derecha 
 tabla_medidas_estadistico <- gt(resultados$medidas_estadistico[-1]) %>% 
         tab_header(title = md("**Estadístico**")) %>% 
         tab_spanner(label = md("***Medidas de Centralización***"), columns = c(1, 2)) %>% 
