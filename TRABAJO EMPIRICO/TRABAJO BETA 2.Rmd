@@ -157,7 +157,7 @@ grafico_estadistico_histogram_density
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/MEDIDAS/medidasmediamuestral.png")
 ```
-
+  
 ## Comparación con la varianza poblacional
 
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
@@ -181,7 +181,9 @@ grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = m
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 ```
-
+Con estos datos se confirmaría el que el valor de la esperanza de las medias muestrales es muy parecida a la media teórica. 
+Como indica el coeficiente de curtosis, esta distribución es mesocúrtica (se parece mucho a una normal), y es muy simétrica pero tiene un poco de asimetría a la derecha, por lo que también la mediana se parece mucho a la media al ser una distribución centrada.
+En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es muy parecida a la teórica, y si el tamaño muestral aumentara se acercaría más. El IQR y la MAD son pequeños así que los valores centrales están muy concentrados en torno al centro, que en este caso está cerca de la media.
 \newpage
 Este es el gráfico resultante.
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 5, fig.height = 4}
