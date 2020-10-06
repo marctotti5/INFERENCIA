@@ -234,3 +234,4 @@ Aquí tenim un altre gràfic
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA-I/TRABAJO EMPIRICO/IMAGENES/PLOTS/graficocomparativo_density.png")
 ```
 Como se puede apreciar por los boxplots de ambos, estadísticos y medias muestrales, ambas distribuciones aproximan bastante bien la media poblacional pero la distribución de las medias muestrales tiene bastante menos dispersión, por lo que podemos concluir que la media muestral es mejor estimador que la media entre el primer y el tercer cuartil de los datos.
+también se puede apreciar en ambas distribuciones una gran cantidad de datos atípicos y datos lejanos al centro, que han sido consecuencia de generar los datos de nuestras muestras aleatoriamente.
