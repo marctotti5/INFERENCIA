@@ -1,2 +1,2 @@
-# INFERENCIA-I
+# INFERENCIA
 Aquí subiré los trabajos de inferencia
