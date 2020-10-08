@@ -1,0 +1,338 @@
+---
+output: 
+ pdf_document:
+         toc: true
+title: "Índice"
+
+
+---
+
+\newpage
+# 1. Introducción
+El objetivo de este trabajo es crear un Estadístico para estimar la media poblacional de una distribución continua determinada (que no sea la Distribución Normal ni la Exponencial) y comparar su rendimiento con la media muestral (que es el estadístico más usado para aproximar la media poblacional). En nuestro caso hemos optado por la distribución Beta (con alpha y beta = 2) debido a que su función de densidad es simétrica y centrada, y nos parece que es sencillo encontrar un Estadístico fiable para aproximar su media poblacional. 
+
+
+# 2. Distribución Beta
+La Distribución Beta es una distribución continua que depende de dos parámetros (alpha y beta) y que toma valores en el intervalo [0,1]. Debido a que solo está definida en [0,1] es una distribución muy usada para modelizar la probabilidad de que ocurra un evento, aunque también es usada para describir datos empíricos (debido a la variedad de formas que puede adoptar en función de los valores que tomen sus parámetros) y para modelar la fiabilidad de un sistema. Su función de densidad es distinta de cero solo cuando 0 < x < 1 y es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
+library(knitr)
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/DENSIDAD1.jpg")
+```
+
+También se puede escribir como:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "175px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funciondensidad2.jpg")
+```
+
+Dónde la función Beta es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "263px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funcionbeta.jpg")
+```
+
+\newpage
+### Propiedades de la función Beta
+La función beta cumple las siguientes propiedades (las usaremos para encontrar su función generadora de momentos, etc):
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/propiedadesfuncionbeta.jpg")
+```
+
+
+## 2.0 Forma de la distribución Beta
+Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida)
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/Beta_distribution.png")
+```
+
+\newpage
+## 2.1 Momentos y Función Generadora de Momentos
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos.jpg")
+```
+^[Nota: Los cálculos para encontrar los momentos y la función generadora están en el Anexo I y II (respectivamente)]
+
+\newpage
+# 3. Creación del Estadístico para estimar la Media Poblacional
+## 3.1 Escogiendo los parámetros de la distribución
+En nuestro caso hemos optado por seleccionar una distribución beta con alpha = 2, beta = 2, ya que pensamos que debido a su forma simétrica, seremos capaces de aproximar la media poblacional de manera más precisa que si fuera asimétrica. La forma de una distribución Beta(2,2) es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "300px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/distribucionbetapreguntar.png")
+```
+
+Los momentos de la distribución Beta(alpha = 2, beta = 2) son los siguientes:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "150px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos22.jpg")
+```
+
+## 3.2 Fórmula del Estadístico
+Nuestro estadístico es el promedio de los percentiles 40 y 60. Hemos escogido este estadístico debido a que la distribución por la que hemos optado (distribución beta(2,2)), es bastante simétrica, y nos parece que podemos llegar a estimar la media poblacional con bastante precisión. La fórmula de nuestro Estadístico es:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", out.height = "100px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/ESTADISTICO.jpg")
+```
+
+\newpage
+## 3.3 Código para obtener el estadístico
+En primer lugar hemos creado la función *muestreo*. Esta función es la base de toda la práctica. Para crearla primeramente ejecutamos unas cuantas librerías de R. 
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(e1071)
+library(moments)
+library(gt)
+library(ggpubr)
+library(ggplotify)
+library(grid)
+```
+
+A continuación creamos la función *muestreo*, que depende de 2 parámetros (alpha y beta, los mismos que determinan la distribución beta). Entonces creamos una lista vacía, una matriz de 40 columnas y 10 filas (donde guardaremos los datos de la muestra) y guardamos en la lista una matriz igual que la que hemos creado anteriormente. A continuación calculamos la media y varianza poblacionales, mediante la fórmula que hemos visto previamente. 
+
+Entonces mediante un bucle con j iterando por columnas, establecemos un set.seed j-ésimo, que nos crea j muestras aleatorias y reproducibles (para obtener siempre el mismo resultado), pero distintas entre sí, de una distribución beta, con parámetros alpha y beta introducidos por el usuario. A continuación cambiamos el nombre de las columnas, sustituyendo las V generadas por espacios vacíos. Utilizamos el sexto elemento de la lista para calcular nuestro estadístico de las 40 muestras, guardando los datos en las columnas de la matriz previamente creada. 
+
+Finalmente ordenamos la lista, creamos dataframes para resumir la información y hacemos que la función imprima dicha lista al ser llamada. 
+
+
+```{r, message = FALSE, warning = FALSE}
+muestreo <- function(alpha, beta){
+        lista <- list()
+        tabla_muestras <- matrix(ncol = 40, nrow = 10) %>% as.data.frame() 
+        lista[[6]] <- matrix(ncol = 40, nrow = 1) %>% as.data.frame()
+        media_poblacional <- alpha / (alpha + beta)
+        varianza_poblacional <- alpha * beta / (((alpha + beta) ^ 2 ) * (alpha + beta + 1))
+        for(j in 1:40){
+                set.seed(j)
+                tabla_muestras[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
+                colnames(tabla_muestras)[j] <- as.numeric(gsub("V", "", 
+                                                               colnames(tabla_muestras)[j]))
+                colnames(lista[[6]])[j] <-  as.numeric(gsub("V", "", 
+                                                            colnames(tabla_muestras)[j]))
+                lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], 
+                                                 probs = c(0.6)) + 
+                                                quantile(tabla_muestras[, j], 
+                                                         probs = c(0.4)))
+        }
+        lista[[1]] <- tabla_muestras
+        lista[[2]] <- media_poblacional
+        lista[[3]] <- varianza_poblacional
+        lista[[4]] <- data.frame(Muestra = names(colMeans(tabla_muestras)), 
+                                 mediamuestral = unname(colMeans(tabla_muestras))) 
+        lista[[5]] <- data.frame(Estimador = "Media Muestral", 
+                                 Media = mean(lista[[4]][, 2]),
+                                 Mediana = median(lista[[4]][, 2]),
+                                 SD = sd(lista[[4]][, 2]), 
+                                 IQR = IQR(lista[[4]][, 2]), 
+                                 MAD = mad(lista[[4]][, 2]), 
+                                 Curtosis = moments::kurtosis(lista[[4]][, 2]), 
+                                 Asimetría = moments::skewness(lista[[4]][, 2]))
+        lista[[6]] <- gather(as.data.frame(lista[[6]])) 
+        colnames(lista[[6]]) <- c("Muestra", "Estadístico")
+        lista[[7]] <- data.frame(Estimador = "Estadístico",
+                                 Media = mean(lista[[6]][, 2]),
+                                 Mediana = median(lista[[6]][, 2]),
+                                 SD = sd(lista[[6]][, 2]), 
+                                 IQR = IQR(lista[[6]][, 2]), 
+                                 MAD = mad(lista[[6]][, 2]), 
+                                 Curtosis = moments::kurtosis(lista[[6]][, 2]), 
+                                 Asimetría = moments::skewness(lista[[6]][, 2]))
+        lista[[8]] <- rbind(lista[[5]], lista[[7]])
+        names(lista) <- c("tabla_muestras", "media_poblacional", 
+                          "varianza_poblacional", "media_muestral", 
+                          "medidas_media_muestral", "estadistico", 
+                          "medidas_estadistico", "tabla_comparacion")
+        lista
+}
+
+resultados <- muestreo(alpha = 2, beta = 2)
+datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
+```
+
+Al llamar la función, para alpha = 2 y beta = 2, este es el output generado por la función:
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
+resultados
+```
+
+
+\newpage
+# 4. Evaluación de nuestro Estadístico
+Para comparar nuestro estadístico con la media muestral usaremos las siguientes medidas de dispersión, centralización y forma: 
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasestadistico2.png")
+grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
+        geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
+        geom_density(color = "blue", size = 0.75) +
+        ggtitle("Histograma de nuestro Estadístico") + 
+        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+grafico_estadistico_histogram_density
+```
+
+Podemos ver que en promedio nuestro estadístico se acerca bastante a la media poblacional (cuyo valor es 0.5) y por otro lado la mediana también está muy centrada, y también podría ser un buen estimador de la media poblacional. En cuanto a las medidas de forma, la curtosis nos indica que se trata de una distribución levemente platicúrtica (su valor es menor que 3), es decir menos apuntada y con colas menos gruesas que la normal y el coeficiente de asimetría nos indica una pequeña asimetría a la derecha, ya que su valor es mayor que 0. Finalmente en cuanto a la dispersión, la distancia entre el cuartil 3 y 1 (IQR) es muy pequeña, por lo que podemos concretar que la mayoría de los datos están concentrados en este rango. Además, la desviación absoluta mediana (MAD) y también la desviación típica (SD) son muy pequeñas, y eso nos indica que hay poca variabilidad en los datos, es decir, estan bastante concentrados alrededor de la media y la mediana. 
+^[Nota: El código para obtener el gráfico se encuentra en el Anexo III]
+
+
+
+\newpage
+# 5. Evaluación de la Media Muestral
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasmediamuestral.png")
+```
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, fig.align = "center", out.width = "430px"}
+grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
+        geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
+        geom_density(size = 0.75, col = "blue") +
+        ggtitle("Histograma de la Media Muestral") + 
+        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+grafico_mediamuestral_histogram_density
+```
+Con estos datos se confirmaría el que el valor de la esperanza de las medias muestrales es muy parecida a la media teórica. 
+Como indica el coeficiente de curtosis, esta distribución es prácticamente mesocúrtica, es decir se parece mucho a una normal y es muy simétrica pero tiene un poco de asimetría a la derecha, por lo que también la mediana se parece mucho a la media al ser una distribución centrada.
+En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es muy pequeña, así como el IQR y la MAD, indicando esto que los valores están muy concentrados en torno al centro, que en este caso está cerca de la media.
+
+^[Nota: El código para obtener el gráfico se encuentra en el Anexo IV]
+
+
+\newpage
+## 5.1 Varianza de la media muestral
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/varianzamuestralpoblacional.png")
+```
+Podemos observar que la varianza de la media muestral que hemos obtenido, es muy parecida a la teórica, y si el tamaño muestral aumentará infinitamente, convergería a dicho valor teórico.
+
+\newpage
+# 6. Comparaciones y Conclusiones
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidascomparativa2.png")
+```
+```{r, message = FALSE, warning = FALSE, echo = FALSE, include = TRUE, fig.align = "center", fig.width = 7, fig.height = 4}
+datos_grafico_comparativo <- gather(datosgrafico[, -1])
+colnames(datos_grafico_comparativo) <- c("Estimador", "Valor")
+datos_grafico_comparativo[, 1] <- gsub("mediamuestral", "Media Muestral", 
+                                       datos_grafico_comparativo[, 1])
+cutoff <- data.frame( yintercept = resultados$media_poblacional, 
+                      cutoff = factor(50) )
+
+grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo, 
+                                      aes(x = Estimador, y = Valor, 
+                                          fill = Estimador, 
+                                          color = Estimador)) + 
+        geom_boxplot(alpha = 0.5) + 
+        ggtitle("Diagrama de Caja: Estadístico vs Media Muestral") + 
+        theme(legend.position = "none",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) 
+grafico_comparativo_boxplot
+```
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "550px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/PLOTS/graficocomparativo_density.png")
+```
+Como se puede apreciar en los boxplots, histogramas de ambos y la tabla comparativa, ambos estadísticos aproximan bastante bien la media poblacional pero la distribución de las medias muestrales tiene bastante menos dispersión. Concretamente su desviación típica es menor que la de nuestro estadístico, por lo que podemos concluir que **la media muestral es un estimador más preciso de la media poblacional que nuestro estadístico** (la media entre el primer y el tercer cuartil de los datos). Aún así podemos concluir también que nuestro estadístico es un muy buen estimador de la media poblacional, en la medida en que su desviación típica no difiere demasiado de la de la media muestral. Es decir, **en caso de que no pudieramos usar la media muestral como estimador de la poblacional, nuestro estadístico sería una buena alternativa.**
+
+\newpage
+# Anexo I: Cálculo de los Momentos
+## Cálculo de la Esperanza
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculoesperanza.jpg")
+```
+
+## Cálculo de la varianza (1)
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculovarianza1.jpg")
+```
+
+## Cálculo de la varianza (2)
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculovarianza2.jpg")
+```
+
+# Anexo II: Cálculo de la Función Generadora de Momentos
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculofunciongeneratriz.jpg")
+```
+
+# Anexo III: Histograma de nuestro estadístico (código)
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, 
+                                                aes(x = Estadístico)) + 
+        geom_histogram(fill = "lightblue", 
+                       binwidth = 0.05, color = "black") + 
+        geom_density(color = "blue", size = 0.75) +
+        ggtitle("Histograma de nuestro Estadístico") + 
+        geom_vline(aes(xintercept = resultados[[7]]$Media, 
+                       col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black", 
+                                      Estimador = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+```
+
+# Anexo IV: Histograma de la media muestral (código)
+```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
+grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, 
+                                                  aes(x = mediamuestral)) + 
+        geom_histogram(fill = "lightblue", 
+                       color = "black", binwidth = 0.05) + 
+        geom_density(size = 0.75, col = "blue") +
+        ggtitle("Histograma de la Media Muestral") + 
+        geom_vline(aes(xintercept = resultados[[5]]$Media, 
+                       col = "Media Muestral"), linetype = "dashed", 
+                   size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black", 
+                                      "Media Muestral" = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) + 
+        xlim(0, 1)
+```
+
+# Bibliografía
+* Asimetría estadística. (2020). Recuperado de: https://es.wikipedia.org/w/index.php?title=Asimetr%C3%ADa_estad%C3%ADstica&oldid=125822430
+* Beta distribution. (2020). Recuperado de: https://en.wikipedia.org/w/index.php?title=Beta_distribution&oldid=981642297
+* Brown, Kyle. (2020). Understanding R: Mathematical Expressions. Recuperado de: https://rpubs.com/kylewbrown/math-expressions
+* Características de estimadores. (s. f.). Recuperado de: https://www.uv.es/webgid/Inferencial/42_caractersticas_estimadores.html#:~:text=Diremos%20que%20un%20estimador%20es,muestra%20aproxime%20al%20par%C3%A1metro%20poblacional.
+* Commonly used symbols in R Markdown. (s. f.). Recuperado de: https://people.ok.ubc.ca/jpither/modules/Symbols_markdown.html
+* Curtosis. (2020). Recuperado de: https://es.wikipedia.org/w/index.php?title=Curtosis&oldid=128327400
+* Curtosis - Definición, qué es y concepto. (2017). Recuperado de: https://economipedia.com/definiciones/curtosis.html
+* Función gamma. (2020). Recuperado de: https://ast.wikipedia.org/w/index.php?title=Funci%C3%B3n_gamma&oldid=2985655
+* Greek letters, symbols, and line breaks inside a ggplot legend label . (s. f.). Recuperado de: https://stackoverflow.com/questions/27690729/greek-letters-symbols-and-line-breaks-inside-a-ggplot-legend-label
+* Mathematical Annotation in R. (s. f.). Recuperado de: https://stat.ethz.ch/R-manual/R-devel/library/grDevices/html/plotmath.html
+* Medidas de dispersión. (2020). Recuperado de: https://es.wikipedia.org/w/index.php?title=Medidas_de_dispersi%C3%B3n&oldid=128745923
+* Molina, Luis. (2009). Apuntes de Latex. Recuperado de: http://metodos.fam.cie.uva.es/~latex/apuntes/apuntes3.pdf
+* Moment Generating Function of Beta Distribution. (2018). Recuperado de: https://proofwiki.org/wiki/Moment_Generating_Function_of_Beta_Distribution#:~:text=Let%20X%E2%88%BCBeta(%CE%B1,%2Br)tkk!
+* Ramirez, Oscar. (2015). Escribiendo funciones en R. Recuperado de: https://rpubs.com/osoramirez/93049
+* Reilly, Archer. (2020). Writing Mathematic Fomulars in Markdown. Recuperado de: http://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/
+* Remove space between two graphs in R. (s. f.). Recuperado de: https://stackoverflow.com/questions/22226358/remove-space-between-two-graphs
+* Rincón, Luis. (2013). Distribución beta. Recuperado de: https://www.youtube.com/watch?v=cqvEph836gM&ab_channel=LuisRinc%C3%B3n
