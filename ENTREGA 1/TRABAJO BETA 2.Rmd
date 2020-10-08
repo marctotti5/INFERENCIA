@@ -155,8 +155,10 @@ Para comparar nuestro estadístico con la media muestral usaremos las siguientes
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasestadistico2.png")
 grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
-        geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
-        geom_density(color = "blue", size = 0.75) +
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
+                       binwidth = 0.05, color = "black", 
+                       position = "identity") + 
+        geom_density(aes(x = Estadístico, y = ..ndensity..), color = "blue", size = 0.75) +
         ggtitle("Histograma de nuestro Estadístico") + 
         geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
@@ -182,20 +184,29 @@ Podemos ver que en promedio nuestro estadístico se acerca bastante a la media p
 knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasmediamuestral.png")
 ```
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, fig.align = "center", out.width = "430px"}
-grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
-        geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
-        geom_density(size = 0.75, col = "blue") +
+grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, 
+                                                  aes(x = mediamuestral)) + 
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
+                       color = "black", binwidth = 0.05) + 
+        geom_density(aes(y = ..ndensity..), 
+                     size = 0.75, col = "blue") +
         ggtitle("Histograma de la Media Muestral") + 
-        geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
+        geom_vline(aes(xintercept = resultados[[5]]$Media, 
+                       col = "Media Muestral"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black", 
+                                      "Media Muestral" = "red")) + 
         xlab("x") + ylab("f(x)") +
         theme(legend.position = "top",
               legend.text = element_text(size = 14),
               axis.text.x = element_text(size = 12),
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) + 
+        xlim(0, 1)
 grafico_mediamuestral_histogram_density
 ```
 Con estos datos se confirmaría el que el valor de la esperanza de las medias muestrales es muy parecida a la media teórica. 
@@ -241,7 +252,7 @@ grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo,
 grafico_comparativo_boxplot
 ```
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "550px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/PLOTS/graficocomparativo_density.png")
+knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/PLOTS/graficocomparativo.png")
 ```
 Como se puede apreciar en los boxplots, histogramas de ambos y la tabla comparativa, ambos estadísticos aproximan bastante bien la media poblacional pero la distribución de las medias muestrales tiene bastante menos dispersión. Concretamente su desviación típica es menor que la de nuestro estadístico, por lo que podemos concluir que **la media muestral es un estimador más preciso de la media poblacional que nuestro estadístico** (la media entre el primer y el tercer cuartil de los datos). Aún así podemos concluir también que nuestro estadístico es un muy buen estimador de la media poblacional, en la medida en que su desviación típica no difiere demasiado de la de la media muestral. Es decir, **en caso de que no pudieramos usar la media muestral como estimador de la poblacional, nuestro estadístico sería una buena alternativa.**
 
@@ -269,19 +280,15 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 
 # Anexo III: Histograma de nuestro estadístico (código)
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
-grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, 
-                                                aes(x = Estadístico)) + 
-        geom_histogram(fill = "lightblue", 
-                       binwidth = 0.05, color = "black") + 
-        geom_density(color = "blue", size = 0.75) +
+grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
+                       binwidth = 0.05, color = "black", 
+                       position = "identity") + 
+        geom_density(aes(x = Estadístico, y = ..ndensity..), color = "blue", size = 0.75) +
         ggtitle("Histograma de nuestro Estadístico") + 
-        geom_vline(aes(xintercept = resultados[[7]]$Media, 
-                       col = "Estimador"), linetype = "dashed", size = 1) +
-        geom_vline(aes(xintercept = resultados$media_poblacional,  
-                       col = "Media Poblacional"), size = 1) + 
-        scale_color_manual(name = "", 
-                           values = c("Media Poblacional" = "black", 
-                                      Estimador = "red")) + 
+        geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
         xlab("x") + ylab("f(x)") +
         theme(legend.position = "top",
               legend.text = element_text(size = 14),
@@ -295,13 +302,13 @@ grafico_estadistico_histogram_density <- ggplot(data = datosgrafico,
 ```{r, message = FALSE, warning = FALSE, fig.align = "center", fig.width = 4, fig.height = 4}
 grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, 
                                                   aes(x = mediamuestral)) + 
-        geom_histogram(fill = "lightblue", 
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
                        color = "black", binwidth = 0.05) + 
-        geom_density(size = 0.75, col = "blue") +
+        geom_density(aes(y = ..ndensity..), 
+                     size = 0.75, col = "blue") +
         ggtitle("Histograma de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados[[5]]$Media, 
-                       col = "Media Muestral"), linetype = "dashed", 
-                   size = 1) +
+                       col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  
                        col = "Media Poblacional"), size = 1) + 
         scale_color_manual(name = "", 
