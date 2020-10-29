@@ -38,7 +38,7 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 
 
 ## 2.0 Forma de la distribución Beta
-Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida)
+Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida).
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/Beta_distribution.png")
 ```
