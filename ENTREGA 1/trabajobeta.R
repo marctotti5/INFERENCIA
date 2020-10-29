@@ -1,3 +1,5 @@
+install.packages(c("moments", "e1071", "gt", "ggpubr", "ggplotify"))
+
 
 library(tidyverse)
 library(e1071)
@@ -78,8 +80,8 @@ tabla_medidas_estadistico <- gt(resultados$medidas_estadistico[-1]) %>%
 ## 2.1 Histogramas
 
 grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
-        geom_histogram(fill = "lightblue", binwidth = 0.05, color = "black") + 
-        geom_density(color = "blue", size = 0.75) +
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", binwidth = 0.05, color = "black", position = "identity") + 
+        geom_density(aes(x = Estadístico, y = ..ndensity..), color = "blue", size = 0.75) +
         ggtitle("Histograma de nuestro Estadístico") + 
         geom_vline(aes(xintercept = resultados[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
@@ -113,8 +115,8 @@ tabla_varianza_muestral_poblacional <- gt(varianzamediamuestral_data) %>%
 
 ## 3.1 Histogramas
 grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
-        geom_histogram(fill = "lightblue", color = "black", binwidth = 0.05) + 
-        geom_density(size = 0.75, col = "blue") +
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", color = "black", binwidth = 0.05) + 
+        geom_density(aes(y = ..ndensity..), size = 0.75, col = "blue") +
         ggtitle("Histograma de la Media Muestral") + 
         geom_vline(aes(xintercept = resultados[[5]]$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 

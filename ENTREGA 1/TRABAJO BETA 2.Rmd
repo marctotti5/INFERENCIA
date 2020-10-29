@@ -16,37 +16,37 @@ El objetivo de este trabajo es crear un Estadístico para estimar la media pobla
 La Distribución Beta es una distribución continua que depende de dos parámetros (alpha y beta) y que toma valores en el intervalo [0,1]. Debido a que solo está definida en [0,1] es una distribución muy usada para modelizar la probabilidad de que ocurra un evento, aunque también es usada para describir datos empíricos (debido a la variedad de formas que puede adoptar en función de los valores que tomen sus parámetros) y para modelar la fiabilidad de un sistema. Su función de densidad es distinta de cero solo cuando 0 < x < 1 y es la siguiente:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
 library(knitr)
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/DENSIDAD1.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/DENSIDAD1.jpg")
 ```
 
 También se puede escribir como:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "175px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funciondensidad2.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funciondensidad2.jpg")
 ```
 
 Dónde la función Beta es la siguiente:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "263px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funcionbeta.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funcionbeta.jpg")
 ```
 
 \newpage
 ### Propiedades de la función Beta
 La función beta cumple las siguientes propiedades (las usaremos para encontrar su función generadora de momentos, etc):
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/propiedadesfuncionbeta.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/propiedadesfuncionbeta.jpg")
 ```
 
 
 ## 2.0 Forma de la distribución Beta
 Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida)
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/Beta_distribution.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/Beta_distribution.png")
 ```
 
 \newpage
 ## 2.1 Momentos y Función Generadora de Momentos
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos.jpg")
 ```
 ^[Nota: Los cálculos para encontrar los momentos y la función generadora están en el Anexo I y II (respectivamente)]
 
@@ -55,18 +55,18 @@ knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Do
 ## 3.1 Escogiendo los parámetros de la distribución
 En nuestro caso hemos optado por seleccionar una distribución beta con alpha = 2, beta = 2, ya que pensamos que debido a su forma simétrica, seremos capaces de aproximar la media poblacional de manera más precisa que si fuera asimétrica. La forma de una distribución Beta(2,2) es la siguiente:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "300px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/distribucionbetapreguntar.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/distribucionbetapreguntar.png")
 ```
 
 Los momentos de la distribución Beta(alpha = 2, beta = 2) son los siguientes:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "150px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos22.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos22.jpg")
 ```
 
 ## 3.2 Fórmula del Estadístico
 Nuestro estadístico es el promedio de los percentiles 40 y 60. Hemos escogido este estadístico debido a que la distribución por la que hemos optado (distribución beta(2,2)), es bastante simétrica, y nos parece que podemos llegar a estimar la media poblacional con bastante precisión. La fórmula de nuestro Estadístico es:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", out.height = "100px", fig.align = "center"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/ESTADISTICO.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/ESTADISTICO.jpg")
 ```
 
 \newpage
@@ -153,7 +153,7 @@ resultados
 # 4. Evaluación de nuestro Estadístico
 Para comparar nuestro estadístico con la media muestral usaremos las siguientes medidas de dispersión, centralización y forma: 
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasestadistico2.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasestadistico2.png")
 grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadístico)) + 
         geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
                        binwidth = 0.05, color = "black", 
@@ -181,7 +181,7 @@ Podemos ver que en promedio nuestro estadístico se acerca bastante a la media p
 \newpage
 # 5. Evaluación de la Media Muestral
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasmediamuestral.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasmediamuestral.png")
 ```
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, fig.align = "center", out.width = "430px"}
 grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, 
@@ -219,14 +219,14 @@ En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es 
 \newpage
 ## 5.1 Varianza de la media muestral
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/varianzamuestralpoblacional.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/varianzamuestralpoblacional.png")
 ```
 Podemos observar que la varianza de la media muestral que hemos obtenido, es muy parecida a la teórica, y si el tamaño muestral aumentará infinitamente, convergería a dicho valor teórico.
 
 \newpage
 # 6. Comparaciones y Conclusiones
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidascomparativa2.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidascomparativa2.png")
 ```
 ```{r, message = FALSE, warning = FALSE, echo = FALSE, include = TRUE, fig.align = "center", fig.width = 7, fig.height = 4}
 datos_grafico_comparativo <- gather(datosgrafico[, -1])
@@ -252,7 +252,7 @@ grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo,
 grafico_comparativo_boxplot
 ```
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "550px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/PLOTS/graficocomparativo.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/PLOTS/graficocomparativo.png")
 ```
 Como se puede apreciar en los boxplots, histogramas de ambos y la tabla comparativa, ambos estadísticos aproximan bastante bien la media poblacional pero la distribución de las medias muestrales tiene bastante menos dispersión. Concretamente su desviación típica es menor que la de nuestro estadístico, por lo que podemos concluir que **la media muestral es un estimador más preciso de la media poblacional que nuestro estadístico** (la media entre el primer y el tercer cuartil de los datos). Aún así podemos concluir también que nuestro estadístico es un muy buen estimador de la media poblacional, en la medida en que su desviación típica no difiere demasiado de la de la media muestral. Es decir, **en caso de que no pudieramos usar la media muestral como estimador de la poblacional, nuestro estadístico sería una buena alternativa.**
 
@@ -260,22 +260,22 @@ Como se puede apreciar en los boxplots, histogramas de ambos y la tabla comparat
 # Anexo I: Cálculo de los Momentos
 ## Cálculo de la Esperanza
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculoesperanza.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculoesperanza.jpg")
 ```
 
 ## Cálculo de la varianza (1)
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculovarianza1.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculovarianza1.jpg")
 ```
 
 ## Cálculo de la varianza (2)
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculovarianza2.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculovarianza2.jpg")
 ```
 
 # Anexo II: Cálculo de la Función Generadora de Momentos
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", fig.align = "center", out.height = "600px"}
-knitr::include_graphics("C:/Users/marct/OneDrive - Tecnocampus Mataro-Maresme/Documentos/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculofunciongeneratriz.jpg")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/calculofunciongeneratriz.jpg")
 ```
 
 # Anexo III: Histograma de nuestro estadístico (código)
