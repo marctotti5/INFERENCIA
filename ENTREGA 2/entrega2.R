@@ -1,0 +1,76 @@
+library(tidyverse)
+library(e1071)
+library(moments)
+library(gt)
+library(ggpubr)
+library(ggplotify)
+library(grid)
+# 1. Creamos las muestras, evaluamos el estadístico en ellas, así como la media muestral
+
+entrega_dos <- function(alpha, beta){
+        lista <- list()
+        media_poblacional <- alpha / (alpha + beta)
+        varianza_poblacional <- alpha * beta / (((alpha + beta) ^ 2 ) * (alpha + beta + 1))
+        tamaño_muestral <- c(10, 100, 1000, 10000, 100000)
+        lista[[6]] <- matrix(ncol = 40, nrow = length(tamaño_muestral)) 
+        for(i in seq_along(tamaño_muestral)){
+                lista[[i]] <- matrix(ncol = 40, nrow = tamaño_muestral[i]) 
+                for(j in 1:40){
+                        set.seed(j)
+                        lista[[i]][, j] <- rbeta(tamaño_muestral[i], shape1 = alpha, shape2 = beta)
+                        colnames(lista[[i]])[j] <- as.numeric(gsub("V", "", colnames(lista[[i]])[j]))
+                        colnames(lista[[i]])[j] <-  as.numeric(gsub("V", "", colnames(lista[[i]])[j]))
+                        lista[[6]][i, j] <- 0.5*(quantile(lista[[i]][, j], probs = c(0.6)) + 
+                                                        quantile(lista[[i]][, j], probs = c(0.4))) 
+                }
+        }
+        rownames(lista[[6]]) <- tamaño_muestral
+        # Esperanza estadístico
+        lista[[6]] <- t(lista[[6]])
+        lista[[7]] <- t(colMeans(lista[[6]])) %>% unname() %>% as.numeric()
+        lista[[7]] <- data.frame(tamaño_muestral = as.character(tamaño_muestral), media_estadistico = lista[[7]])
+        
+        # Varianza estadístico
+        lista[[8]] <- data.frame(tamaño_muestral = as.character(tamaño_muestral), varianza_estadistico = as.numeric(unname(apply(lista[[6]], 2, var))))
+        lista[[7]] <- merge(lista[[7]], lista[[8]])
+        lista[[8]] <- NULL
+        
+        # Sesgo, precisión, ECM, consistencia (implicita, ya que hemos calculado la varianza y el sesgo)
+        for(i in 1:nrow(lista[[7]])){
+                lista[[7]][i, 4] <- lista[[7]][i, 2] - media_poblacional
+                lista[[7]][i, 5] <- 1/(lista[[7]][i, 3]) # precision = 1/var(t)
+                lista[[7]][i, 6] <- lista[[7]][i, 3] + (lista[[7]][i, 4])^2 # ecm(t) = varianza(t) + (sesgo(t))^2
+        }
+        colnames(lista[[7]]) <- c("tamaño_muestral", "esperanza_estadistico", 
+                                  "varianza_estadistico", "sesgo_estadístico", 
+                                  "precisión_estadístico", "ECM_estadístico")
+        
+        
+        names(lista) <- c("muestras_10", "muestras_100", "muestras_1000", "muestras_10000", "muestras_100000",
+                          "estadístico_n", "propiedades_estimador")
+        
+        # Falta invarianza y suficiencia
+        lista
+
+        
+}
+
+resultados <- entrega_dos(alpha = 2, beta = 2)
+
+
+# Robustez 
+ponderacion_contaminacion <- 0.95
+for(j in 1:40){
+        set.seed(j)
+        beta[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
+        unif[, j] <- runif(10, min = 2, max = 3)
+        for(i in 1:10){
+                beta_contaminada[i, j] <- ponderacion_contaminacion * beta[i, j] + (1 - ponderacion_contaminacion) * unif[i, j]
+        }
+        colnames(tabla_muestras)[j] <- as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
+        colnames(lista[[6]])[j] <-  as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
+        lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], probs = c(0.6)) + 
+                                        quantile(tabla_muestras[, j], probs = c(0.4)))
+}
+
+

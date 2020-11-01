@@ -1,5 +1,3 @@
-install.packages(c("moments", "e1071", "gt", "ggpubr", "ggplotify"))
-
 
 library(tidyverse)
 library(e1071)
@@ -29,14 +27,6 @@ muestreo <- function(alpha, beta){
         lista[[3]] <- varianza_poblacional
         lista[[4]] <- data.frame(Muestra = names(colMeans(tabla_muestras)), 
                                  mediamuestral = unname(colMeans(tabla_muestras))) 
-        lista[[5]] <- data.frame(Estimador = "Media Muestral", 
-                                 Media = mean(lista[[4]][, 2]),
-                                 Mediana = median(lista[[4]][, 2]),
-                                 SD = sd(lista[[4]][, 2]), 
-                                 IQR = IQR(lista[[4]][, 2]), 
-                                 MAD = mad(lista[[4]][, 2]), 
-                                 Curtosis = moments::kurtosis(lista[[4]][, 2]), 
-                                 Asimetría = e1071::skewness(lista[[4]][, 2]))
         lista[[6]] <- gather(as.data.frame(lista[[6]])) 
         colnames(lista[[6]]) <- c("Muestra", "Estadístico")
         lista[[7]] <- data.frame(Estimador = "Estadístico",
