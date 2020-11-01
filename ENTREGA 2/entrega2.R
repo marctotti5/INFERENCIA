@@ -13,6 +13,7 @@ entrega_dos <- function(alpha, beta){
         varianza_poblacional <- alpha * beta / (((alpha + beta) ^ 2 ) * (alpha + beta + 1))
         tamaño_muestral <- c(10, 100, 1000, 10000, 100000)
         lista[[6]] <- matrix(ncol = 40, nrow = length(tamaño_muestral)) 
+        
         for(i in seq_along(tamaño_muestral)){
                 lista[[i]] <- matrix(ncol = 40, nrow = tamaño_muestral[i]) 
                 for(j in 1:40){
@@ -24,6 +25,8 @@ entrega_dos <- function(alpha, beta){
                                                         quantile(lista[[i]][, j], probs = c(0.4))) 
                 }
         }
+        
+        
         rownames(lista[[6]]) <- tamaño_muestral
         # Esperanza estadístico
         lista[[6]] <- t(lista[[6]])
@@ -46,31 +49,67 @@ entrega_dos <- function(alpha, beta){
                                   "precisión_estadístico", "ECM_estadístico")
         
         
-        names(lista) <- c("muestras_10", "muestras_100", "muestras_1000", "muestras_10000", "muestras_100000",
-                          "estadístico_n", "propiedades_estimador")
         
         # Falta invarianza y suficiencia
-        lista
-
         
+        # Robustez
+        distribucion_muestral_beta <- as.data.frame(matrix(nrow = 40, ncol = 10))
+        distribucion_muestral_uniforme <- as.data.frame(matrix(nrow = 40, ncol = 10))
+        distribucion_muestral_contaminada <- as.data.frame(matrix(nrow = 40, ncol = 10))
+        estadistico <- as.data.frame(matrix(nrow = 1, ncol = 40))
+        media_muestral <- as.data.frame(matrix(nrow = 1, ncol = 40))
+        porcentaje_contaminacion <- 0.9
+        for(j in 1:40){
+                distribucion_muestral_beta[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
+                distribucion_muestral_uniforme[, j] <- runif(10, min = 2, max = 3)
+                distribucion_muestral_contaminada[, j] <- (porcentaje_contaminacion * distribucion_muestral_beta[, j]) + 
+                        ((1 - porcentaje_contaminacion) * distribucion_muestral_beta[, j])
+                colnames(distribucion_muestral_beta)[j] <-  as.numeric(gsub("V", "", colnames(distribucion_muestral_beta)[j]))
+                colnames(distribucion_muestral_uniforme)[j] <-  as.numeric(gsub("V", "", colnames(distribucion_muestral_uniforme)[j]))
+                colnames(distribucion_muestral_contaminada)[j] <-  as.numeric(gsub("V", "", colnames(distribucion_muestral_contaminada)[j]))
+                estadistico[, j] <- 0.5*(quantile(distribucion_muestral_contaminada[, j], probs = c(0.6)) + 
+                                                quantile(distribucion_muestral_contaminada[, j], probs = c(0.4)))
+        }
+        media_muestral <- data.frame(Muestra = names(colMeans(distribucion_muestral_contaminada)), 
+                                     mediamuestral = unname(colMeans(distribucion_muestral_contaminada))) 
+        lista[[8]] <- distribucion_muestral_contaminada
+        lista[[9]] <- gather(as.data.frame(estadistico))
+        lista[[9]][, 1] <- 1:nrow(lista[[9]])
+        colnames(lista[[9]]) <- c("Muestra", "Estadistico")
+        
+        
+        lista[[10]] <- data.frame(Estimador = "Estadístico",
+                                  Media = mean(lista[[9]][, 2]),
+                                  Mediana = median(lista[[9]][, 2]),
+                                  SD = sd(lista[[9]][, 2]), 
+                                  IQR = IQR(lista[[9]][, 2]), 
+                                  MAD = mad(lista[[9]][, 2]), 
+                                  Curtosis = moments::kurtosis(lista[[9]][, 2]), 
+                                  Asimetría = e1071::skewness(lista[[9]][, 2]))
+        
+        lista[[11]] <- media_muestral
+        
+        lista[[12]] <- data.frame(Estimador = "Media Muestral", 
+                                  Media = mean(lista[[11]][, 2]),
+                                  Mediana = median(lista[[11]][, 2]),
+                                  SD = sd(lista[[11]][, 2]), 
+                                  IQR = IQR(lista[[11]][, 2]), 
+                                  MAD = mad(lista[[11]][, 2]), 
+                                  Curtosis = moments::kurtosis(lista[[11]][, 2]), 
+                                  Asimetría = e1071::skewness(lista[[11]][, 2]))
+        
+        
+        lista[[13]] <- rbind(lista[[10]], lista[[12]])
+        names(lista) <- c("muestras_10", "muestras_100", "muestras_1000", "muestras_10000", "muestras_100000",
+                          "estadístico_n", "propiedades_estimador", "distribucion_contaminada", 
+                          "estadistico", "medidas_estadistico", "media_muestral", "medidas_mediamuestral", "tabla_comparacion")
+        
+
+        lista
 }
 
 resultados <- entrega_dos(alpha = 2, beta = 2)
 
 
-# Robustez 
-ponderacion_contaminacion <- 0.95
-for(j in 1:40){
-        set.seed(j)
-        beta[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
-        unif[, j] <- runif(10, min = 2, max = 3)
-        for(i in 1:10){
-                beta_contaminada[i, j] <- ponderacion_contaminacion * beta[i, j] + (1 - ponderacion_contaminacion) * unif[i, j]
-        }
-        colnames(tabla_muestras)[j] <- as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
-        colnames(lista[[6]])[j] <-  as.numeric(gsub("V", "", colnames(tabla_muestras)[j]))
-        lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], probs = c(0.6)) + 
-                                        quantile(tabla_muestras[, j], probs = c(0.4)))
-}
 
 
