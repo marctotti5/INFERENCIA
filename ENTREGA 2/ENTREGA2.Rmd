@@ -74,8 +74,10 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 # 4. Propiedades del Estimador T
 En nuestro caso hemos podido demostrar analíticamente la insesgabilidad, la invarianza y la suficiencia de nuestro estimador.
 ## 4.1 Insesgabilidad
+
 ### 4.1.1. Analíticamente
 
+\newpage
 ### 4.1.2 Numéricamente
 Para evaluar numéricamente la insesgadez hemos generado 40 muestras de distintos tamaños (n = 10, ... , n = 1000000), entonces hemos calculado nuuestro estadístico y su media (para todos los valores de n). Hemos obtenido el siguiente gráfico.
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
@@ -383,12 +385,79 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 
 \newpage
 ### 4.6.1 Robustez de nuestro estadístico
-\newpage
 #### 4.6.1.1 Muestra sin contaminar
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasestadistico2.png")
-knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/hist_est_sincontaminar.png")
+muestreo <- function(alpha, beta){
+        lista <- list()
+        tabla_muestras <- matrix(ncol = 40, nrow = 10) %>% as.data.frame() 
+        lista[[6]] <- matrix(ncol = 40, nrow = 1) %>% as.data.frame()
+        media_poblacional <- alpha / (alpha + beta)
+        varianza_poblacional <- alpha * beta / (((alpha + beta) ^ 2 ) * (alpha + beta + 1))
+        for(j in 1:40){
+                set.seed(j)
+                tabla_muestras[, j] <- rbeta(10, shape1 = alpha, shape2 = beta)
+                colnames(tabla_muestras)[j] <- as.numeric(gsub("V", "", 
+                                                               colnames(tabla_muestras)[j]))
+                colnames(lista[[6]])[j] <-  as.numeric(gsub("V", "", 
+                                                            colnames(tabla_muestras)[j]))
+                lista[[6]][, j] <- 0.5*(quantile(tabla_muestras[, j], 
+                                                 probs = c(0.6)) + 
+                                                quantile(tabla_muestras[, j], 
+                                                         probs = c(0.4)))
+        }
+        lista[[1]] <- tabla_muestras
+        lista[[2]] <- media_poblacional
+        lista[[3]] <- varianza_poblacional
+        lista[[4]] <- data.frame(Muestra = names(colMeans(tabla_muestras)), 
+                                 mediamuestral = unname(colMeans(tabla_muestras))) 
+        lista[[5]] <- data.frame(Estimador = "Media Muestral", 
+                                 Media = mean(lista[[4]][, 2]),
+                                 Mediana = median(lista[[4]][, 2]),
+                                 SD = sd(lista[[4]][, 2]), 
+                                 IQR = IQR(lista[[4]][, 2]), 
+                                 MAD = mad(lista[[4]][, 2]), 
+                                 Curtosis = moments::kurtosis(lista[[4]][, 2]), 
+                                 Asimetría = moments::skewness(lista[[4]][, 2]))
+        lista[[6]] <- gather(as.data.frame(lista[[6]])) 
+        colnames(lista[[6]]) <- c("Muestra", "Estadístico")
+        lista[[7]] <- data.frame(Estimador = "Estadístico",
+                                 Media = mean(lista[[6]][, 2]),
+                                 Mediana = median(lista[[6]][, 2]),
+                                 SD = sd(lista[[6]][, 2]), 
+                                 IQR = IQR(lista[[6]][, 2]), 
+                                 MAD = mad(lista[[6]][, 2]), 
+                                 Curtosis = moments::kurtosis(lista[[6]][, 2]), 
+                                 Asimetría = moments::skewness(lista[[6]][, 2]))
+        lista[[8]] <- rbind(lista[[5]], lista[[7]])
+        names(lista) <- c("tabla_muestras", "media_poblacional", 
+                          "varianza_poblacional", "media_muestral", 
+                          "medidas_media_muestral", "estadistico", 
+                          "medidas_estadistico", "tabla_comparacion")
+        lista
+}
+
+resultados_sincontaminar <- muestreo(alpha = 2, beta = 2)
+datosgrafico_sincontaminar <- inner_join(resultados_sincontaminar$media_muestral , resultados_sincontaminar$estadistico)
+grafico_estadistico_histogram_density_sincontaminar <- ggplot(data = datosgrafico_sincontaminar, aes(x = Estadístico)) + 
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
+                       binwidth = 0.05, color = "black", 
+                       position = "identity") + 
+        geom_density(aes(x = Estadístico, y = ..ndensity..), color = "blue", size = 0.75) +
+        ggtitle("Histograma de T (muestra original)") + 
+        geom_vline(aes(xintercept = resultados_sincontaminar[[7]]$Media, col = "Estimador"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados_sincontaminar$media_poblacional,  col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+grafico_estadistico_histogram_density_sincontaminar
 ```
+Podemos ver que en promedio nuestro estadístico se acerca bastante a la media poblacional (cuyo valor es 0.5) y por otro lado la mediana también está muy centrada, y también podría ser un buen estimador de la media poblacional. En cuanto a las medidas de forma, la curtosis nos indica que se trata de una distribución levemente platicúrtica (su valor es menor que 3), es decir menos apuntada y con colas menos gruesas que la normal y el coeficiente de asimetría nos indica una pequeña asimetría a la derecha, ya que su valor es mayor que 0. Finalmente en cuanto a la dispersión, la distancia entre el cuartil 3 y 1 (IQR) es muy pequeña, por lo que podemos concretar que la mayoría de los datos están concentrados en este rango. Además, la desviación absoluta mediana (MAD) y también la desviación típica (SD) son muy pequeñas, y eso nos indica que hay poca variabilidad en los datos, es decir, estan bastante concentrados alrededor de la media y la mediana. 
 
 \newpage
 #### 4.6.1.2 Muestra contaminada
@@ -407,7 +476,7 @@ tabla_medidas_estadistico <- gt(resultados$medidas_estadistico[-1]) %>%
 grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadistico)) + 
         geom_histogram(aes(y = ..ndensity..), fill = "lightblue", binwidth = 0.05, color = "black", position = "identity") + 
         geom_density(aes(x = Estadistico, y = ..ndensity..), color = "blue", size = 0.75) +
-        ggtitle("Histograma de nuestro Estadístico T") + 
+        ggtitle("Histograma de T (muestra contaminada)") + 
         geom_vline(aes(xintercept = resultados$medidas_estadistico$Media, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
         scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 
@@ -421,15 +490,56 @@ grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Est
 grafico_estadistico_histogram_density
 ```
 
+
+
+\newpage
+#### 4.6.1.3 Comparando T en la muestra original y contaminada
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "750px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/robustez_comparativa_estadistico.png")
+```
+Podemos observar que al añadir datos atípicos, nuestro estimador es bastante robusto, ya que en promedio se desplaza relativamente poco de la media poblacional. Cuando la muestra no contiene datos atípicos, T sobreestima la media poblacional en un 0.7186 %, mientras que al añadir datos lo hace en un 7.03114 % . Eso supone que multiplicamos nuestro sesgo por 10 al añadir datos atípicos. Luego compararemos estos datos con los equivalentes de la media muestral, para saber cuál de los dos estimadores es más robusto.
+
+
 \newpage
 ### 4.6.2 Robustez de la Media Muestral
 #### 4.6.2.1 Muestra sin contaminar
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+library(tidyverse)
+library(e1071)
+library(moments)
+library(gt)
+library(ggpubr)
+library(ggplotify)
+library(grid)
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasmediamuestral.png")
-knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/hist_mediamuestral_sincontaminar.png")
-
+grafico_mediamuestral_histogram_density_sincontaminar <- ggplot(data = datosgrafico_sincontaminar, 
+                                                  aes(x = mediamuestral)) + 
+        geom_histogram(aes(y = ..ndensity..), fill = "lightblue", 
+                       color = "black", binwidth = 0.05) + 
+        geom_density(aes(y = ..ndensity..), 
+                     size = 0.75, col = "blue") +
+        ggtitle("Histograma Media Muestral (muestra original)") + 
+        geom_vline(aes(xintercept = resultados_sincontaminar[[5]]$Media, 
+                       col = "Media Muestral"), linetype = "dashed", size = 1) +
+        geom_vline(aes(xintercept = resultados_sincontaminar$media_poblacional,  
+                       col = "Media Poblacional"), size = 1) + 
+        scale_color_manual(name = "", 
+                           values = c("Media Poblacional" = "black", 
+                                      "Media Muestral" = "red")) + 
+        xlab("x") + ylab("f(x)") +
+        theme(legend.position = "top",
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) + 
+        xlim(0, 1)
+grafico_mediamuestral_histogram_density_sincontaminar
 ```
-
+Con estos datos se confirmaría el que el valor de la esperanza de las medias muestrales es muy parecida a la media teórica. 
+Como indica el coeficiente de curtosis, esta distribución es prácticamente mesocúrtica, es decir se parece mucho a una normal y es muy simétrica pero tiene un poco de asimetría a la derecha, por lo que también la mediana se parece mucho a la media al ser una distribución centrada.
+En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es muy pequeña, así como el IQR y la MAD, indicando esto que los valores están muy concentrados en torno al centro, que en este caso está cerca de la media.
 
 \newpage
 #### 4.6.2.2 Muestra contaminada
@@ -439,7 +549,7 @@ datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
         geom_histogram(aes(y = ..ndensity..), fill = "lightblue", color = "black", binwidth = 0.05) + 
         geom_density(aes(y = ..ndensity..), size = 0.75, col = "blue") +
-        ggtitle("Histograma de la Media Muestral") + 
+        ggtitle("Histograma Media Muestral (muestra contaminada)") + 
         geom_vline(aes(xintercept = resultados$medidas_media_muestral$Media, col = "Media Muestral"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
         scale_color_manual(name = "", values = c("Media Poblacional" = "black", "Media Muestral" = "red")) + 
@@ -454,15 +564,21 @@ grafico_mediamuestral_histogram_density
 ```
 
 \newpage
-### 4.6.3 Varianza de la media muestral
-```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
-knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/varianza_mediamuestral.png")
+#### 4.6.2.3 Comparando la Media Muestral en la muestra original y contaminada
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/robustez_comparativa_mediamuestral.png")
 ```
+Podemos observar que al añadir datos atípicos, nuestro estimador es muy poco robusto, ya que en promedio se desplaza mucho de la media poblacional. Cuando la muestra no contiene datos atípicos, la media muestral sobreestima en promedio la media poblacional en un 1.45412 %, mientras que al añadir datos atípicos lo hace en un 42.08146 % . Esto nos permite concluir que la media muestral no es un estimador robusto de la poblacional.
+
 
 \newpage
-
-
+#### 4.6.2.3 Comparando la robustez de T y la media muestral
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/robustez_estadistico_media.png")
+```
+Finalmente podemos comparar ambos estimadores (T y la media muestral), observando que **T es mucho más robusto que la media muestral**, ya que se desplaza en promedio mucho menos que esta última.
 
 \newpage
 ## 4.7 Suficiencia
+
 
