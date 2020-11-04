@@ -1,3 +1,84 @@
+---
+output: 
+ pdf_document:
+         toc: true
+title: "Índice"
+
+
+---
+
+\newpage
+# 1. Introducción
+El objetivo de este trabajo es crear un Estadístico para estimar la media poblacional de una distribución continua determinada (que no sea la Distribución Normal ni la Exponencial) y comparar su rendimiento con la media muestral (que es el estadístico más usado para aproximar la media poblacional). En nuestro caso hemos optado por la distribución Beta (con alpha y beta = 2) debido a que su función de densidad es simétrica y centrada, y nos parece que es sencillo encontrar un Estadístico fiable para aproximar su media poblacional. 
+
+
+# 2. Distribución Beta
+La Distribución Beta es una distribución continua que depende de dos parámetros (alpha y beta) y que toma valores en el intervalo [0,1]. Debido a que solo está definida en [0,1] es una distribución muy usada para modelizar la probabilidad de que ocurra un evento, aunque también es usada para describir datos empíricos (debido a la variedad de formas que puede adoptar en función de los valores que tomen sus parámetros) y para modelar la fiabilidad de un sistema. Su función de densidad es distinta de cero solo cuando 0 < x < 1 y es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
+library(knitr)
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/DENSIDAD1.jpg")
+```
+
+También se puede escribir como:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "175px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funciondensidad2.jpg")
+```
+
+Dónde la función Beta es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "263px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/funcionbeta.jpg")
+```
+
+\newpage
+### Propiedades de la función Beta
+La función beta cumple las siguientes propiedades (las usaremos para encontrar su función generadora de momentos, etc):
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/propiedadesfuncionbeta.jpg")
+```
+
+
+## 2.0 Forma de la distribución Beta
+Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida).
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/Beta_distribution.png")
+```
+
+\newpage
+## 2.1 Momentos y Función Generadora de Momentos
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos.jpg")
+```
+^[Nota: Los cálculos para encontrar los momentos y la función generadora están en el Anexo I y II (respectivamente)]
+
+\newpage
+# 3. Creación del Estadístico para estimar la Media Poblacional
+## 3.1 Escogiendo los parámetros de la distribución
+En nuestro caso hemos optado por seleccionar una distribución beta con alpha = 2, beta = 2, ya que pensamos que debido a su forma simétrica, seremos capaces de aproximar la media poblacional de manera más precisa que si fuera asimétrica. La forma de una distribución Beta(2,2) es la siguiente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "300px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/distribucionbetapreguntar.png")
+```
+
+Los momentos de la distribución Beta(alpha = 2, beta = 2) son los siguientes:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "150px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos22.jpg")
+```
+
+## 3.2 Fórmula del Estadístico
+Nuestro estadístico es el promedio de los percentiles 40 y 60. Hemos escogido este estadístico debido a que la distribución por la que hemos optado (distribución beta(2,2)), es bastante simétrica, y nos parece que podemos llegar a estimar la media poblacional con bastante precisión. La fórmula de nuestro Estadístico es:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", out.height = "100px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/ESTADISTICO.jpg")
+```
+
+
+\newpage
+# 4. Propiedades del Estimador T
+En nuestro caso hemos podido demostrar analíticamente la insesgabilidad, la invarianza y la suficiencia de nuestro estimador.
+## 4.1 Insesgabilidad
+### 4.1.1. Analíticamente
+
+### 4.1.2 Numéricamente
+Para evaluar numéricamente la insesgadez hemos generado 40 muestras de distintos tamaños (n = 10, ... , n = 1000000), entonces hemos calculado nuuestro estadístico y su media (para todos los valores de n). Hemos obtenido el siguiente gráfico.
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 library(tidyverse)
 library(e1071)
 library(moments)
@@ -188,11 +269,33 @@ grafico_sesgo <- ggplot(data = datos_graficos,
               plot.title = element_text(size = 18, 
                                         face = 'bold', 
                                         hjust = 0.5)) 
+grafico_esperanza
+```
+Podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nuestro estadístico se va acercando cada vez más a la media poblacional. De aquí podemos suponer que para un n suficientemente grande, la esperanza del estadístico convergerá a la media poblacional.
 
+\newpage
+Definimos el sesgo como:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "170px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/sesgo.jpg")
+```
+Hemos obtenido el siguiente gráfico para el sesgo.
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 
+grafico_sesgo
+```
+En este caso, podemos observar que el sesgo de nuestro estimador tiende a cero, a medida que aumenta el tamaño muestral. 
+Después de la demostración analítica y de observar los dos gráficos anteriores, podemos concluir que nuestro estimador es **insesgado**.
 
-# Precisión: tanto la media muestral como nuestro estimador son insesgados, pero la media tiene una mayor precisión que nuestro estimador, 
-# esto se debe a que tiene menor varianza que T.
+\newpage
+## 4.2 Eficiencia / Precisión
+La eficiencia o precisión se define como: 
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center", out.height = "250px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/precision.jpg")
+```
+
+En nuestro caso hemos generado 40 muestras de distintos tamaños (n = 10, ... , n = 1000000), y hemos calculado la varianza y la precisión de nuestro estadístico para cada uno de los tamaños muestrales. Además hemos decidido comparar la eficiencia de nuestro estimador T y la media muestral.
+Hemos obtenido el siguiente gráfico para el sesgo.
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 datos_comparar_precision <- cbind(datos_graficos, resultados$datos_mediamuestral)[, c(1,3,5,9,11)]
 colores_precision <- c("Pr[T]" = "black", "Pr[Media Muestral]" = "red")
 grafico_comparacion_precision <- ggplot(data = datos_comparar_precision, aes(x = tamaño_muestral, group = 1)) + 
@@ -211,31 +314,19 @@ grafico_comparacion_precision <- ggplot(data = datos_comparar_precision, aes(x =
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', 
                                         hjust = 0.5)) 
+grafico_comparacion_precision
+```
+Podemos observar que la media muestral es más precisa estimando la media poblacional que nuestro parámetro. Esto se debe a que la varianza de la media muestral es menor que la de nuestro estadístico, y también a que la media muestral es el estimador máximo verosímil de la media poblacional.
 
-# Varianza : La varianza tiende a cero cuando n tiende a infinito
-datos_graficos <- resultados$propiedades_estimador
-grafico_varianza <- ggplot(data = datos_graficos, 
-                           aes(x = tamaño_muestral, y = varianza_estadistico, 
-                               group = 1)) + 
-        geom_line(color = "purple", size = 0.5) + 
-        geom_point(size = 3, color = "purple")  + 
-        ggtitle("Varianza de nuestro estadístico T") + 
-        xlab("Tamaño Muestral (n)") + ylab("Var[T]") +
-        theme(legend.position = "top",
-              legend.title = element_blank(),
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', 
-                                        hjust = 0.5)) + ylim(0, 0.008)
+\newpage
+## 4.3 Error cuadrático Medio (ECM)
+El error cuadrático medio de un estimador T se define como el promedio de las desviaciones del estadístico al parámetro que estima. Matemáticamente: 
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "350px", fig.align = "center", out.height = "300px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/ECM.jpg")
+```
 
-
-
-# ECM = VAR(T) + b(T)
-# Al ser ambos la media muestral y nuestro estadístico insesgados, su ECM es su varianza, y como la media muestral tiene menor varianza, tiene menor ECM
-# Es decir, la media muestral se aleja en promedio menos de la media poblacional que nuestro estimador T.
-# Por lo tanto la media muestral sería mejor estimador de la media poblacional que nuestro estimador
+En este caso hemos seguido el mismo procedimiento que en las anteriores propiedades, obteniendo el siguiente gráfico:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 datos_comparar_ecm <- cbind(datos_graficos, resultados$datos_mediamuestral)[, c(1, 6, 12)]
 colores_ecm <- c("ECM[T]" = "black", "ECM[Media Muestral]" = "red")
 grafico_comparacion_ECM <- ggplot(data = datos_comparar_ecm, aes(x = tamaño_muestral, group = 1)) + 
@@ -254,15 +345,55 @@ grafico_comparacion_ECM <- ggplot(data = datos_comparar_ecm, aes(x = tamaño_mue
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', 
                                         hjust = 0.5)) 
+grafico_comparacion_ECM
+```
 
+Como ambos estimadores (la media muestral y T), son insesgados, el ECM de ambos se reduce a su varianza, y como la media muestral tiene menos varianza, tamién tiene menor error cuadrático medio.
 
-# Consistencia: la varianza y el sesgo tienden a cero a medida que n tiende a infinito. 
-# Esto significa que nuestro estimador es consistente, es decir que cuando n tiende a infinito aproxima bien la media poblacional
+\newpage
+## 4.4 Consistencia
+Un estimador T se dice consistente si como condición suficiente cumple las siguientes propiedades:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/consistencia.jpg")
+```
 
-grafico_consistencia <- ggarrange(grafico_varianza, grafico_sesgo) 
+En nuestro caso hemos tenido que probar la consistencia numéricamente, puesto que el cálculo de la varianza de manera analítica es muy complicada. Hemos obtenido los siguientes gráficos:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "350px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/consistencia.png")
+```
+Podemos observar como al aumentar el tamaño muestral (es decir cuando n tiende a infinito), tanto la varianza de nuestro estadístico y el sesgo tienden a cero. Esto nos permite afirmar con bastante seguridad que nuestro estimador es **consistente** para la media poblacional, es decir, que al aumentar el tamaño muestral se aproxima bien a ella.
 
-# Robustez
-# Hemos contaminado la muestra con p = 0.1, de una
+\newpage
+## 4.5 Invarianza
+Se dice que un estimador T es invariante por traslaciones (1) o por cambios de escala (2), si se cumple que:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/invarianza.jpg")
+```
+
+En nuestro caso, sabemos que los percentiles son **invariantes por traslaciones** ya que al sumar a cada elemento de la muestra una constante el percentil k-ésimo sigue siendo el mismo, y **lo mismo en el caso de los cambios de escala**. No es posible demostrar esto analíticamente, debido a que no disponemos de una expresión escrita del percentil.
+
+\newpage
+## 4.6 Robustez 
+Para analizar la robustez hemos generado una distribución contaminada, a partir de nuestra distribución original (Beta(2,2)) y la distribución Uniforme en el intervalo [2, 3]. Para crear la muestra contaminada hemos generado 400 datos aleatorios de una distribución Uniforme[0,1]. En caso de que la probabilidad de esta última distribución fuera menor o igual que 0.9, generabamos un dato de la Beta[2,2], y en caso que p > 0.9 escogíamos un dato de la Uniforme[2,3]. 
+
+Gráficamente:
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/robustez3.png")
+```
+
+\newpage
+### 4.6.1 Robustez de nuestro estadístico
+\newpage
+#### 4.6.1.1 Muestra sin contaminar
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasestadistico2.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/hist_est_sincontaminar.png")
+```
+
+\newpage
+#### 4.6.1.2 Muestra contaminada
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/tabla_estadistico.png")
 datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 # 2. 2. Gráficos sobre nuestro estimador: analizar y calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
 tabla_medidas_estadistico <- gt(resultados$medidas_estadistico[-1]) %>% 
@@ -287,31 +418,24 @@ grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Est
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+grafico_estadistico_histogram_density
+```
+
+\newpage
+### 4.6.2 Robustez de la Media Muestral
+#### 4.6.2.1 Muestra sin contaminar
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/MEDIDAS/medidasmediamuestral.png")
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/hist_mediamuestral_sincontaminar.png")
+
+```
 
 
-
-
-
-# 3. Gráficos media muestral: analizar y  calcular otras medidas (de centralización y dispersión), hacer boxplots, hacer gráficos de los residuos, etc
-## 3.0 Medidas de centralización, dispersión y forma de nuestro estimador
-tabla_medidas_media_muestral <- gt(resultados$medidas_media_muestral[-1]) %>% 
-        tab_header(title = md("**Media Muestral**")) %>% 
-        tab_spanner(label = md("***Medidas de Centralización***"), columns = c(1, 2)) %>% 
-        tab_spanner(label = md("***Medidas de Dispersión***"), columns = c(3:5)) %>% 
-        tab_spanner(label = md("***Medidas de Forma***"), columns = c(6, 7)) %>% 
-        tab_options(table.width = 5) 
-
-# Cuando n tiende a infinito, se supone que la varianza de la media muestral será sigma^2/n
-varianzamediamuestral_data <- data.frame(varianzamediamuestral_real = resultados$medidas_media_muestral$SD^2, 
-                                         varianzamediamuestral_teorica = resultados$varianza_poblacional / 10)
-colnames(varianzamediamuestral_data) <- c("Valor Obtenido", "Valor Teórico")
-tabla_varianza_muestral_poblacional <- gt(varianzamediamuestral_data) %>% 
-        tab_header(title = md("**Varianza de la Media Muestral**")) %>% 
-        cols_align(align = "center")
-
-
-
-## 3.1 Histogramas
+\newpage
+#### 4.6.2.2 Muestra contaminada
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/tabla_mediamuestral.png")
+datosgrafico <- inner_join(resultados$media_muestral , resultados$estadistico)
 grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = mediamuestral)) + 
         geom_histogram(aes(y = ..ndensity..), fill = "lightblue", color = "black", binwidth = 0.05) + 
         geom_density(aes(y = ..ndensity..), size = 0.75, col = "blue") +
@@ -326,28 +450,19 @@ grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = m
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
+grafico_mediamuestral_histogram_density
+```
 
-# 4. Comparación de la Media Muestral y nuestro Estimador (el que menor varianza o desviación tenga, será un mejor estimador)
-tabla_medidas_comparacion <- gt(resultados$tabla_comparacion) %>% 
-        tab_header(title = md("**Comparativa de Estimadores**")) %>% 
-        tab_spanner(label = md("***Medidas de Centralización***"), columns = c(2, 3)) %>% 
-        tab_spanner(label = md("***Medidas de Dispersión***"), columns = c(4:6)) %>% 
-        tab_spanner(label = md("***Medidas de Forma***"), columns = c(7, 8))
+\newpage
+### 4.6.3 Varianza de la media muestral
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/varianza_mediamuestral.png")
+```
 
-datos_grafico_comparativo <- gather(datosgrafico[, -1])
-colnames(datos_grafico_comparativo) <- c("Estimador", "Valor")
-datos_grafico_comparativo[, 1] <- gsub("mediamuestral", "Media Muestral", datos_grafico_comparativo[, 1])
-cutoff <- data.frame( yintercept = resultados$media_poblacional, cutoff = factor(50) )
+\newpage
 
-grafico_comparativo_boxplot <- ggplot(data = datos_grafico_comparativo, aes(x = Estimador, y = Valor, fill = Estimador, color = Estimador)) + 
-        geom_boxplot(alpha = 0.5) + ggtitle("Diagrama de Caja: Estadístico T vs Media Muestral") + 
-        theme(legend.position = "none",
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"), 
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
 
-grafico_comparativo_histogram_density <- ggarrange(grafico_estadistico_histogram_density,  
-                                                   grafico_mediamuestral_histogram_density, 
-                                                   nrow = 2)
+
+\newpage
+## 4.7 Suficiencia
+
