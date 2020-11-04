@@ -276,7 +276,7 @@ tabla_medidas_estadistico <- gt(resultados$medidas_estadistico[-1]) %>%
 grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Estadistico)) + 
         geom_histogram(aes(y = ..ndensity..), fill = "lightblue", binwidth = 0.05, color = "black", position = "identity") + 
         geom_density(aes(x = Estadistico, y = ..ndensity..), color = "blue", size = 0.75) +
-        ggtitle("Histograma de nuestro Estadístico T") + 
+        ggtitle("Histograma de nuestro Estadístico ") + 
         geom_vline(aes(xintercept = resultados$medidas_estadistico$Media, col = "Estimador"), linetype = "dashed", size = 1) +
         geom_vline(aes(xintercept = resultados$media_poblacional,  col = "Media Poblacional"), size = 1) + 
         scale_color_manual(name = "", values = c("Media Poblacional" = "black", Estimador = "red")) + 

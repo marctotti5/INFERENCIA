@@ -20,4 +20,5 @@ plot(0, 0, type = "n", xlim = c(-0.25, 0.25), ylim = c(-0.25, 0.25), xaxt = "n",
 text(0, 0, labels = varianzabeta22, cex = 3)
 
 
+
 # 

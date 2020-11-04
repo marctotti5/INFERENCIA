@@ -73,9 +73,17 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 \newpage
 # 4. Propiedades del Estimador T
 En nuestro caso hemos podido demostrar analíticamente la insesgabilidad, la invarianza y la suficiencia de nuestro estimador.
-## 4.1 Insesgabilidad
 
+## 4.1 Insesgabilidad
 ### 4.1.1. Analíticamente
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", out.height = "600px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/SESGO1.jpg")
+```
+\newpage
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", out.height = "600px", fig.align = "center"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/SESGO2.jpg")
+```
+
 
 \newpage
 ### 4.1.2 Numéricamente
@@ -277,7 +285,7 @@ Podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nu
 
 \newpage
 Definimos el sesgo como:
-```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "170px", fig.align = "center", out.height = "200px"}
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center", out.height = "200px"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/sesgo.jpg")
 ```
 Hemos obtenido el siguiente gráfico para el sesgo.
@@ -489,7 +497,7 @@ grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Est
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 grafico_estadistico_histogram_density
 ```
-
+Nuestro estadístico para la muestra contaminada se desplaza en promedio relativamente poco de la media poblacional. A la mediana el pasa algo similar siendo también un buen estimador del parámetro. En cuanto a las medidas de dispersión, los datos atípicos no han provocado cambios relevantes en los valores de la SD, IQR y MAD respecto a la muestra sin contaminar. Al contrario, sucede con las medidas de forma que, como indica el coeficiente de asimetría, tiene una leve asimetría a la derecha, aunque mayor que en la muestra sin contaminar. La curtosis indica que la distribución del estimador es leptocúrtica ya que su valor es mayor que 3, por lo que es más apuntada y con colas más gruesas que la normal.
 
 
 \newpage
@@ -562,6 +570,7 @@ grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = m
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 grafico_mediamuestral_histogram_density
 ```
+Como podemos observar en el gráfico, la media muestral contaminada es muy diferente a la media sin contaminar, concretamente un 20% mayor, por lo que podemos decir que es bastante asimétrica a la derecha. Como indica el coeficiente de curtosis, esta distribución es platicúrtica, es decir, es menos apuntada y con colas menos gruesas que la normal.Comparando las medidas de dispersión en la muestra contaminada y la original, la desviación típica muestral (SD) es un 15% mayor, así como el IQR y la MAD, que son un 28% y 18% respectivamente.
 
 \newpage
 #### 4.6.2.3 Comparando la Media Muestral en la muestra original y contaminada
