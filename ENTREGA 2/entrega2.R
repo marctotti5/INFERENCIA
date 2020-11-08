@@ -64,6 +64,7 @@ entrega_dos <- function(alpha, beta){
         colnames(datos_mediamuestral) <- c("tamaño_muestral", "esperanza_mediamuestral", 
                                                "varianza_mediamuestral", "sesgo_mediamuestral", 
                                                "precisión_mediamuestral", "ECM_mediamuestral")
+        lista[[25]] <- datos_mediamuestral
         
         # Falta invarianza y suficiencia
         
@@ -128,6 +129,59 @@ entrega_dos <- function(alpha, beta){
         lista[[14]] <- media_poblacional
         lista[[15]] <- varianza_poblacional
         lista[[16]] <- datos_mediamuestral
+        
+        # Ley de los grandes numeros
+        num_experimentos <- c(rep(0, 16), 40, 400, 4000, 40000, 400000)
+        lista[[22]] <- matrix(ncol = 10, nrow = length(num_experimentos)) 
+        datos_mediamuestral_numexperimentos <- matrix(ncol = 10, nrow = length(num_experimentos))
+        
+        for(i in 17:21){
+                lista[[i]] <- matrix(ncol = 10, nrow = num_experimentos[i]) 
+                for(j in 1:10){
+                        set.seed(j)
+                        lista[[i]][, j] <- rbeta(num_experimentos[i], shape1 = alpha, shape2 = beta)
+                        lista[[22]][i, j] <- 0.5*(quantile(lista[[i]][, j], probs = c(0.6)) + 
+                                                         quantile(lista[[i]][, j], probs = c(0.4))) 
+                        datos_mediamuestral_numexperimentos[i, j] <- mean(lista[[i]][, j])
+                }
+        }
+        lista[[22]] <- lista[[22]][complete.cases(lista[[22]]), ]
+        datos_mediamuestral_numexperimentos <- datos_mediamuestral_numexperimentos[complete.cases(datos_mediamuestral_numexperimentos), ]
+        rownames(lista[[22]]) <- num_experimentos[17:length(num_experimentos)]
+        num_experimentos <- c(40, 400, 4000, 40000, 400000)
+        
+        # 6 es 22
+        lista[[22]] <- t(lista[[22]])
+        lista[[23]] <- t(colMeans(lista[[22]])) %>% unname() %>% as.numeric()
+        lista[[23]] <- data.frame(experimentos = as.character(num_experimentos), media_estadistico = lista[[23]])
+        
+        # Varianza estadístico
+        lista[[24]] <- data.frame(experimentos = as.character(num_experimentos), varianza_estadistico = as.numeric(unname(apply(lista[[22]], 2, var))))
+        lista[[23]] <- merge(lista[[23]], lista[[24]])
+        lista[[24]] <- NULL
+        
+        # Sesgo, precisión, ECM, consistencia (implicita, ya que hemos calculado la varianza y el sesgo)
+        for(i in 1:nrow(lista[[23]])){
+                lista[[23]][i, 4] <- lista[[23]][i, 2] - media_poblacional
+                lista[[23]][i, 5] <- 1/(lista[[23]][i, 3]) # precision = 1/var(t)
+                lista[[23]][i, 6] <- lista[[23]][i, 3] + (lista[[23]][i, 4])^2 # ecm(t) = varianza(t) + (sesgo(t))^2
+        }
+        colnames(lista[[23]]) <- c("experimentos", "esperanza_estadistico", 
+                                  "varianza_estadistico", "sesgo_estadistico", 
+                                  "precisión_estadistico", "ECM_estadistico")
+        rownames(datos_mediamuestral_numexperimentos) <- rownames(lista[[22]])
+        datos_mediamuestral_numexperimentos <- t(datos_mediamuestral_numexperimentos)
+        datos_mediamuestral_numexperimentos <- data.frame(experimentos = as.character(num_experimentos),
+                                                          esperanza_mediamuestral = as.numeric(unname(apply(datos_mediamuestral_numexperimentos, 2, mean))),
+                                                          varianza_mediamuestral = as.numeric(unname(apply(datos_mediamuestral_numexperimentos, 2, var))),
+                                                          sesgo_mediamuestral = as.numeric(unname(apply(datos_mediamuestral_numexperimentos, 2, mean))) - media_poblacional, 
+                                                          precision_mediamuestral = 1/as.numeric(unname(apply(datos_mediamuestral_numexperimentos, 2, var))))
+        datos_mediamuestral_numexperimentos$ECM_mediamuestral <- datos_mediamuestral_numexperimentos$varianza_mediamuestral + (datos_mediamuestral_numexperimentos$sesgo_mediamuestral)^2
+        colnames(datos_mediamuestral_numexperimentos) <- c("experimentos", "esperanza_mediamuestral", 
+                                                           "varianza_mediamuestral", "sesgo_mediamuestral", 
+                                                           "precisión_mediamuestral", "ECM_mediamuestral")
+        lista[[24]] <- datos_mediamuestral_numexperimentos
+        lista[[25]] <- datos_mediamuestral
         names(lista) <- c("muestras_10", "muestras_100", 
                           "muestras_1000", "muestras_10000", 
                           "muestras_100k", "estadístico_n", 
@@ -135,13 +189,17 @@ entrega_dos <- function(alpha, beta){
                           "estadistico", "medidas_estadistico", 
                           "media_muestral", "medidas_media_muestral", 
                           "tabla_comparacion", "media_poblacional", "varianza_poblacional",
-                          "datos_mediamuestral")
+                          "datos_mediamuestral", "muestras_40exp", "muestras_400exp", "muestras_4000exp",
+                          "muestras_40000exp", "muestras_400000exp", "estadistico_exp", "propiedades_estimador_exp", 
+                          "propiedades_mediamuestral_exp", "propiedades_mediamuestral")
         
-
+        
         lista
 }
 
 resultados <- entrega_dos(alpha = 2, beta = 2)
+resultados[[7]]
+resultados[[23]]
 
 # Insesgadez 
 datos_graficos <- resultados$propiedades_estimador
