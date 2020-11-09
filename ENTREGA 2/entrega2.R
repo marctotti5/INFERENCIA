@@ -198,23 +198,23 @@ entrega_dos <- function(alpha, beta){
 }
 
 resultados <- entrega_dos(alpha = 2, beta = 2)
-resultados[[7]]
-resultados[[23]]
 
 # Insesgadez 
-datos_graficos <- resultados$propiedades_estimador
-colores_esperanza <- c("E[T]" = "black", "Media Poblacional" = "red")
+datos_graficos <- merge(resultados$propiedades_estimador_exp, resultados$propiedades_mediamuestral_exp)
+colores_esperanza <- c("E[T]" = "black", "E[Media Muestral]" = "blue",  "Media Poblacional" = "red")
 # Hemos visto analíticamente que nuestro estimador es insesgado, es decir, que en promedio es la media poblacional
 # Aquí podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nuestro estadístico se va acercando cada vez más a la media poblacional
 # De aquí podemos suponer que para un n suficientemente grande, la esperanza del estadístico convergerá a la media poblacional
-grafico_esperanza <- ggplot(data = datos_graficos, aes(x = tamaño_muestral, y = esperanza_estadistico, 
-                                  group = 1)) + 
-        geom_line(aes(color = "E[T]"), size = 0.5) + geom_point(size = 3) + 
+grafico_esperanza <- ggplot(data = datos_graficos, aes(x = experimentos, y = esperanza_estadistico, group = 1)) + 
         geom_hline(aes(yintercept = resultados$media_poblacional, color = "Media Poblacional"), 
-                   linetype = "dashed", size = 1) + 
+                   linetype = "dashed", size = 1) +
+        geom_line(aes(color = "E[T]"), size = 0.75) + 
+        geom_point(size = 3) + 
+        geom_line(aes(x = experimentos, y = esperanza_mediamuestral , color = "E[Media Muestral]"), size = 0.75) +
+        geom_point(aes(x = experimentos, y = esperanza_mediamuestral), size = 3, color = "blue") + 
         scale_color_manual(values = colores_esperanza) + 
-        ggtitle("Esperanza de nuestro estadístico T") + 
-        xlab("Tamaño Muestral (n)") + ylab("E[T]") +
+        ggtitle(expression(bold(paste("Esperanza de los estimadores de ", mu)))) + 
+        xlab("Número de muestras de tamaño 10") + ylab("Esperanza") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -224,43 +224,42 @@ grafico_esperanza <- ggplot(data = datos_graficos, aes(x = tamaño_muestral, y =
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
 
 # En otras palabras, el sesgo de nuestro estimador tiende a cero cuando n tiende a infinito.
-colores_sesgo <- c("b[T]" = "black", "0" = "red")
-grafico_sesgo <- ggplot(data = datos_graficos, 
-                        aes(x = tamaño_muestral, 
-                            y = sesgo_estadistico, 
-                                                       group = 1)) + 
-        geom_line(aes(color = "b[T]"), size = 0.5) + 
-        geom_point(size = 3) + 
+colores_sesgo <- c("b[T]" = "black", "b[Media Muestral]" = "blue",  "0" = "red")
+# Hemos visto analíticamente que nuestro estimador es insesgado, es decir, que en promedio es la media poblacional
+# Aquí podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nuestro estadístico se va acercando cada vez más a la media poblacional
+# De aquí podemos suponer que para un n suficientemente grande, la esperanza del estadístico convergerá a la media poblacional
+grafico_sesgo_exp <- ggplot(data = datos_graficos, aes(x = experimentos, y = sesgo_estadistico, group = 1)) + 
         geom_hline(aes(yintercept = 0, color = "0"), 
                    linetype = "dashed", size = 1) +
+        geom_line(aes(color = "b[T]"), size = 0.75) + 
+        geom_point(size = 3) + 
+        geom_line(aes(x = experimentos, y = sesgo_mediamuestral , color = "b[Media Muestral]"), size = 0.75) +
+        geom_point(aes(x = experimentos, y = sesgo_mediamuestral), size = 3, color = "blue") + 
         scale_color_manual(values = colores_sesgo) + 
-        ggtitle("Sesgo del estadístico T") + 
-        xlab("Tamaño Muestral (n)") + ylab("b[T]") +
-        theme(legend.position = "none",
+        ggtitle(expression(bold(paste("Sesgo de los estimadores de ", mu)))) + 
+        xlab("Número de muestras de tamaño 10") + ylab("Sesgo") +
+        theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
               axis.text.x = element_text(size = 12),
               axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, 
-                                        face = "bold"), 
-              plot.title = element_text(size = 18, 
-                                        face = 'bold', 
-                                        hjust = 0.5)) 
+              axis.title = element_text(size = 13, face = "bold"),
+              axis.title.y = element_text(size = 13, face = "bold"),
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
 
 
 
 # Precisión: tanto la media muestral como nuestro estimador son insesgados, pero la media tiene una mayor precisión que nuestro estimador, 
 # esto se debe a que tiene menor varianza que T.
-datos_comparar_precision <- cbind(datos_graficos, resultados$datos_mediamuestral)[, c(1,3,5,9,11)]
 colores_precision <- c("Pr[T]" = "black", "Pr[Media Muestral]" = "red")
-grafico_comparacion_precision <- ggplot(data = datos_comparar_precision, aes(x = tamaño_muestral, group = 1)) + 
+grafico_comparacion_precision <- ggplot(data = datos_graficos, aes(x = experimentos, group = 1)) + 
         geom_line(aes(y = precisión_estadistico, color = "Pr[T]"), size = 0.75) + 
-        geom_point(aes(y = precisión_estadistico, color = "Pr[T]"), size = 1.5) + 
+        geom_point(aes(y = precisión_estadistico, color = "Pr[T]"), size = 3) + 
         geom_line(aes(y = precisión_mediamuestral, color = "Pr[Media Muestral]"), size = 0.75) +
-        geom_point(aes(y = precisión_mediamuestral, color = "Pr[Media Muestral]"), size = 1.5) + 
+        geom_point(aes(y = precisión_mediamuestral, color = "Pr[Media Muestral]"), size = 3) + 
         scale_color_manual(values = colores_precision) +
-        ggtitle("Precisión: T vs Media Muestral") + 
-        xlab("Tamaño Muestral (n)") + ylab("Precisión") +
+        ggtitle(expression(bold(paste("Precisión de los estimadores de ", mu)))) + 
+        xlab("Número de muestras de tamaño 10") + ylab("Precisión") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -271,14 +270,15 @@ grafico_comparacion_precision <- ggplot(data = datos_comparar_precision, aes(x =
                                         hjust = 0.5)) 
 
 # Varianza : La varianza tiende a cero cuando n tiende a infinito
-datos_graficos <- resultados$propiedades_estimador
-grafico_varianza <- ggplot(data = datos_graficos, 
-                           aes(x = tamaño_muestral, y = varianza_estadistico, 
-                               group = 1)) + 
-        geom_line(color = "purple", size = 0.5) + 
-        geom_point(size = 3, color = "purple")  + 
-        ggtitle("Varianza de nuestro estadístico T") + 
-        xlab("Tamaño Muestral (n)") + ylab("Var[T]") +
+colores_varianza <- c("Var[T]" = "black", "Var[Media Muestral]" = "red")
+grafico_varianza <- ggplot(data = datos_graficos, aes(x = experimentos, group = 1)) + 
+        geom_line(aes(y = varianza_estadistico, color = "Var[T]"), size = 0.75) + 
+        geom_point(aes(y = varianza_estadistico, color = "Var[T]"), size = 3) + 
+        geom_line(aes(y = varianza_mediamuestral, color = "Var[Media Muestral]"), size = 0.75) +
+        geom_point(aes(y = varianza_mediamuestral, color = "Var[Media Muestral]"), size = 3) + 
+        scale_color_manual(values = colores_varianza) +
+        ggtitle(expression(bold(paste("Varianza de los estimadores de ", mu)))) + 
+        xlab("Número de muestras de tamaño 10") + ylab("Varianza") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -286,24 +286,22 @@ grafico_varianza <- ggplot(data = datos_graficos,
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', 
-                                        hjust = 0.5)) + ylim(0, 0.008)
-
+                                        hjust = 0.5)) 
 
 
 # ECM = VAR(T) + b(T)
 # Al ser ambos la media muestral y nuestro estadístico insesgados, su ECM es su varianza, y como la media muestral tiene menor varianza, tiene menor ECM
 # Es decir, la media muestral se aleja en promedio menos de la media poblacional que nuestro estimador T.
 # Por lo tanto la media muestral sería mejor estimador de la media poblacional que nuestro estimador
-datos_comparar_ecm <- cbind(datos_graficos, resultados$datos_mediamuestral)[, c(1, 6, 12)]
 colores_ecm <- c("ECM[T]" = "black", "ECM[Media Muestral]" = "red")
-grafico_comparacion_ECM <- ggplot(data = datos_comparar_ecm, aes(x = tamaño_muestral, group = 1)) + 
+grafico_comparacion_ECM <- ggplot(data = datos_graficos, aes(x = experimentos, group = 1)) + 
         geom_line(aes(y = ECM_estadistico, color = "ECM[T]"), size = 0.75) + 
-        geom_point(aes(y = ECM_estadistico, color = "ECM[T]"), size = 1.5) + 
+        geom_point(aes(y = ECM_estadistico, color = "ECM[T]"), size = 3) + 
         geom_line(aes(y = ECM_mediamuestral, color = "ECM[Media Muestral]"), size = 0.75) +
-        geom_point(aes(y = ECM_mediamuestral, color = "ECM[Media Muestral]"), size = 1.5) + 
+        geom_point(aes(y = ECM_mediamuestral, color = "ECM[Media Muestral]"), size = 3) + 
         scale_color_manual(values = colores_ecm) +
-        ggtitle("ECM: T vs Media Muestral") + 
-        xlab("Tamaño Muestral (n)") + ylab("Precisión") +
+        ggtitle(expression(bold(paste("ECM de los estimadores de ", mu)))) + 
+        xlab("Número de muestras de tamaño 10") + ylab("Error Cuadrático Medio (ECM)") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -316,8 +314,45 @@ grafico_comparacion_ECM <- ggplot(data = datos_comparar_ecm, aes(x = tamaño_mue
 
 # Consistencia: la varianza y el sesgo tienden a cero a medida que n tiende a infinito. 
 # Esto significa que nuestro estimador es consistente, es decir que cuando n tiende a infinito aproxima bien la media poblacional
+datos_graficos_tamaño_muestral <- merge(resultados$propiedades_estimador, resultados$propiedades_mediamuestral)
+colores_varianza <- c("Var[T]" = "black", "Var[Media Muestral]" = "blue")
+grafico_sesgo_tamañomuestral <- ggplot(data = datos_graficos_tamaño_muestral, aes(x = tamaño_muestral, y = sesgo_estadistico, group = 1)) + 
+        geom_hline(aes(yintercept = 0, color = "0"), 
+                   linetype = "dashed", size = 1) +
+        geom_line(aes(color = "b[T]"), size = 0.75) + 
+        geom_point(size = 3) + 
+        geom_line(aes(x = tamaño_muestral, y = sesgo_mediamuestral , color = "b[Media Muestral]"), size = 0.75) +
+        geom_point(aes(x = tamaño_muestral, y = sesgo_mediamuestral), size = 3, color = "blue") + 
+        scale_color_manual(values = colores_sesgo) + 
+        ggtitle(expression(bold(paste("Sesgo de los estimadores de ", mu)))) + 
+        xlab("Tamaño muestral (n)") + ylab("Sesgo") +
+        theme(legend.position = "top",
+              legend.title = element_blank(),
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"),
+              axis.title.y = element_text(size = 13, face = "bold"),
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
+grafico_varianza_tamaño_muestral <- ggplot(data = datos_graficos_tamaño_muestral, aes(x = tamaño_muestral, group = 1)) + 
+        geom_line(aes(y = varianza_estadistico, color = "Var[T]"), size = 0.75) + 
+        geom_point(aes(y = varianza_estadistico, color = "Var[T]"), size = 3) + 
+        geom_line(aes(y = varianza_mediamuestral, color = "Var[Media Muestral]"), size = 0.75) +
+        geom_point(aes(y = varianza_mediamuestral, color = "Var[Media Muestral]"), size = 3) + 
+        scale_color_manual(values = colores_varianza) +
+        ggtitle(expression(bold(paste("Varianza de los estimadores de ", mu)))) + 
+        xlab("Tamaño muestral (n)") + ylab("Varianza") +
+        theme(legend.position = "top",
+              legend.title = element_blank(),
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"), 
+              plot.title = element_text(size = 18, face = 'bold', 
+                                        hjust = 0.5)) 
 
-grafico_consistencia <- ggarrange(grafico_varianza, grafico_sesgo) 
+
+grafico_consistencia <- ggarrange(grafico_varianza_tamaño_muestral, grafico_sesgo_tamañomuestral) 
 
 # Robustez
 # Hemos contaminado la muestra con p = 0.1, de una
