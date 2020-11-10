@@ -48,7 +48,7 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "200px", fig.align = "center"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/momentos.jpg")
 ```
-^[Nota: Los cálculos para encontrar los momentos y la función generadora están en el Anexo I y II (respectivamente)]
+
 
 \newpage
 # 3. Creación del Estadístico para estimar la Media Poblacional
@@ -71,7 +71,13 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 
 \newpage
 # 4. Propiedades de T y de la Media Muestral
-## 4.1 Insesgabilidad
+En este apartado hemos descrito las principales características de nuestro estimador T, y al mismo tiempo lo hemos comparado con la media muestral. Hemos demostrado de manera analítica la insesgadez, la invarianza, y la suficiencia, mientras que el resto de propiedades han sido demostradas numéricamente, a partir de la ley de los grandes números. La ley fuerte de los grandes números asegura que dadas n variables aleatorias independientes e idénticamente distribuidas, con esperanza finita, el promedio muestral de dichas variables aleatorias converge a la media poblacional con probabilidad = 1 cuando el tamaño muestral aumenta infinitamente. 
+
+Podemos aplicar esta ley debido a que hemos generado 40 muestras independientes (ya que los valores de cada muestra se generan de manera aleatoria e independiente de los valores de las demás) y de distintos tamaños muestrales (n = 10, n = 100, ... , n = 100000) de la misma distribución Beta(2,2) (muestras idénticamente distribuidas). Para probar las propiedades numéricamente hemos calculado las diferentes medidas (esperanza, sesgo, varianza, ECM, precisión, etc) de los estimadores de la media poblacional para todos los distintos números de muestras de tamaño 10, y con ello hemos obtenido una serie de datos y gráficos, que nos permiten ver que sucede con cada medida cuando el tamaño muestral tiende a infinito.
+
+\newpage
+## 4.1 Insesgabilidad 
+
 ### 4.1.1. Analíticamente
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "480px", out.height = "600px", fig.align = "center"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/SESGO1.jpg")
@@ -84,7 +90,7 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 
 \newpage
 ### 4.1.2 Numéricamente
-Para evaluar numéricamente la insesgadez hemos generado distintos números de muestras (40, 400, 4000, 40000, 400000) de tamaño 10 (n = 10) con el objetivo de poder aplicar la ley de los grandes números. Entonces hemos calculado la esperanza de los estimadores de la media poblacional (para todos los distintos números de muestras de tamaño 10). Hemos obtenido el siguiente gráfico.
+
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 library(tidyverse)
 library(e1071)
@@ -288,21 +294,21 @@ entrega_dos <- function(alpha, beta){
 resultados <- entrega_dos(alpha = 2, beta = 2)
 
 # Insesgadez 
-datos_graficos <- merge(resultados$propiedades_estimador_exp, resultados$propiedades_mediamuestral_exp)
+datos_graficos <- merge(resultados$propiedades_estimador, resultados$propiedades_mediamuestral)
 colores_esperanza <- c("E[T]" = "black", "E[Media Muestral]" = "blue",  "Media Poblacional" = "red")
 # Hemos visto analíticamente que nuestro estimador es insesgado, es decir, que en promedio es la media poblacional
 # Aquí podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nuestro estadístico se va acercando cada vez más a la media poblacional
 # De aquí podemos suponer que para un n suficientemente grande, la esperanza del estadístico convergerá a la media poblacional
-grafico_esperanza <- ggplot(data = datos_graficos, aes(x = experimentos, y = esperanza_estadistico, group = 1)) + 
+grafico_esperanza <- ggplot(data = datos_graficos, aes(x = tamaño_muestral, y = esperanza_estadistico, group = 1)) + 
         geom_hline(aes(yintercept = resultados$media_poblacional, color = "Media Poblacional"), 
                    linetype = "dashed", size = 1) +
-        geom_line(aes(color = "E[T]"), size = 0.5) + 
+        geom_line(aes(color = "E[T]"), size = 0.75) + 
         geom_point(size = 3) + 
-        geom_line(aes(x = experimentos, y = esperanza_mediamuestral , color = "E[Media Muestral]")) +
-        geom_point(aes(x = experimentos, y = esperanza_mediamuestral), size = 3, color = "blue") + 
+        geom_line(aes(x = tamaño_muestral, y = esperanza_mediamuestral , color = "E[Media Muestral]"), size = 0.75) +
+        geom_point(aes(x = tamaño_muestral, y = esperanza_mediamuestral), size = 3, color = "blue") + 
         scale_color_manual(values = colores_esperanza) + 
         ggtitle(expression(bold(paste("Esperanza de los estimadores de ", mu)))) + 
-        xlab("Número de muestras de tamaño 10") + ylab("Esperanza") +
+        xlab("Tamaño muestral (n)") + ylab("Esperanza") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -310,33 +316,9 @@ grafico_esperanza <- ggplot(data = datos_graficos, aes(x = experimentos, y = esp
               axis.text.y = element_text(size = 12),
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
-
-# En otras palabras, el sesgo de nuestro estimador tiende a cero cuando n tiende a infinito.
-colores_sesgo <- c("b[T]" = "black", "b[Media Muestral]" = "blue",  "0" = "red")
-# Hemos visto analíticamente que nuestro estimador es insesgado, es decir, que en promedio es la media poblacional
-# Aquí podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nuestro estadístico se va acercando cada vez más a la media poblacional
-# De aquí podemos suponer que para un n suficientemente grande, la esperanza del estadístico convergerá a la media poblacional
-grafico_sesgo_exp <- ggplot(data = datos_graficos, aes(x = experimentos, y = sesgo_estadistico, group = 1)) + 
-        geom_hline(aes(yintercept = 0, color = "0"), 
-                   linetype = "dashed", size = 1) +
-        geom_line(aes(color = "b[T]"), size = 0.5) + 
-        geom_point(size = 3) + 
-        geom_line(aes(x = experimentos, y = sesgo_mediamuestral , color = "b[Media Muestral]")) +
-        geom_point(aes(x = experimentos, y = sesgo_mediamuestral), size = 3, color = "blue") + 
-        scale_color_manual(values = colores_sesgo) + 
-        ggtitle(expression(bold(paste("Sesgo de los estimadores de ", mu)))) + 
-        xlab("Número de muestras de tamaño 10") + ylab("Sesgo") +
-        theme(legend.position = "top",
-              legend.title = element_blank(),
-              legend.text = element_text(size = 14),
-              axis.text.x = element_text(size = 12),
-              axis.text.y = element_text(size = 12),
-              axis.title = element_text(size = 13, face = "bold"),
-              axis.title.y = element_text(size = 13, face = "bold"),
-              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
 grafico_esperanza
 ```
-Podemos ver que a medida que aumenta el número de muestras, la esperanza de nuestro estadístico así como la de la media muestral, se va acercando cada vez más a la media poblacional. Por la ley de los grandes números podemos suponer que para un número de muestras suficientemente grande (cuando el número de realizaciones tienda a infinito), ambos estimadores serán insesgados para la media poblacional, es decir, en promedio convergerán a la media poblacional, cuyo valor es de 0,5 .  Además cabe destacar que sabemos por teoría, que ambos estimadores son insesgados (hemos demostrado solamente la insesgadez de T, ya que la insesgadez de la media muestral respecto a la media poblacional ya la hemos dado en clase)
+Podemos ver que a medida que aumenta el tamaño muestral, la esperanza de nuestro estadístico (en negro) así como la de la media muestral (en azul), se van acercando cada vez más a la media poblacional (en rojo). Por la ley de los grandes números podemos suponer que para un tamaño muestral suficientemente grande (cuando n tienda a infinito), ambos estimadores serán insesgados para la media poblacional, es decir, en promedio convergerán a la media poblacional, cuyo valor es de 0,5 .  Además cabe destacar que sabemos por teoría, que ambos estimadores son insesgados (hemos demostrado solamente la insesgadez de T, ya que la insesgadez de la media muestral respecto a la media poblacional ya la hemos dado en clase)
 
 \newpage
 Definimos el sesgo como:
@@ -345,10 +327,32 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 ```
 Hemos obtenido el siguiente gráfico para el sesgo.
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
-
-grafico_sesgo_exp
+# En otras palabras, el sesgo de nuestro estimador tiende a cero cuando n tiende a infinito.
+colores_sesgo <- c("b[T]" = "black", "b[Media Muestral]" = "blue",  "0" = "red")
+# Hemos visto analíticamente que nuestro estimador es insesgado, es decir, que en promedio es la media poblacional
+# Aquí podemos ver que a medida que aumenta el tamaño muestral (n), la esperanza de nuestro estadístico se va acercando cada vez más a la media poblacional
+# De aquí podemos suponer que para un n suficientemente grande, la esperanza del estadístico convergerá a la media poblacional
+grafico_sesgo <- ggplot(data = datos_graficos, aes(x = tamaño_muestral, y = sesgo_estadistico, group = 1)) + 
+        geom_hline(aes(yintercept = 0, color = "0"), 
+                   linetype = "dashed", size = 1) +
+        geom_line(aes(color = "b[T]"), size = 0.75) + 
+        geom_point(size = 3) + 
+        geom_line(aes(x = tamaño_muestral, y = sesgo_mediamuestral , color = "b[Media Muestral]"), size = 0.75) +
+        geom_point(aes(x = tamaño_muestral, y = sesgo_mediamuestral), size = 3, color = "blue") + 
+        scale_color_manual(values = colores_sesgo) + 
+        ggtitle(expression(bold(paste("Sesgo de los estimadores de ", mu)))) + 
+        xlab("Tamaño muestral (n)") + ylab("Sesgo") +
+        theme(legend.position = "top",
+              legend.title = element_blank(),
+              legend.text = element_text(size = 14),
+              axis.text.x = element_text(size = 12),
+              axis.text.y = element_text(size = 12),
+              axis.title = element_text(size = 13, face = "bold"),
+              axis.title.y = element_text(size = 13, face = "bold"),
+              plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) 
+grafico_sesgo
 ```
-En este caso, podemos observar que el sesgo de ambos estimadores tiende a cero, es decir, que a medida que aumenta el número de experimentos, la diferencia entre el valor de los estimadores y de la media poblacional, converge a 0. Por la ley de los grandes números, podemos suponer que para un número de muestras muy grande, el sesgo de ambos estadísticos será 0. Después de la demostración analítica y de observar los dos gráficos anteriores, podemos concluir que **tanto nuestro estadístico como la media muestral son estimadores insesgados de la media poblacional**.
+En este caso, podemos observar que el sesgo de ambos estimadores tiende a cero, es decir, que a medida que aumenta el tamaño muestral, la diferencia entre el valor de los estimadores y de la media poblacional converge a 0. Por la ley de los grandes números, podemos suponer que para un tamaño muestral muy grande, el sesgo de ambos estadísticos será 0. Después de la demostración analítica y de observar los dos gráficos anteriores, podemos concluir que **tanto nuestro estadístico como la media muestral son estimadores insesgados de la media poblacional**.
 
 \newpage
 ## 4.2 Eficiencia / Precisión
@@ -357,17 +361,16 @@ La eficiencia o precisión se define como:
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/FORMULAS/precision.jpg")
 ```
 
-Para evaluar numéricamente la precision hemos generado distintos números de muestras (40, 400, 4000, 40000, 400000) de tamaño 10 (n = 10) con el objetivo de poder aplicar la ley de los grandes números. Entonces hemos calculado la varianza de los estimadores de la media poblacional (para todos los distintos números de muestras de tamaño 10). Hemos obtenido el siguiente gráfico.
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 colores_precision <- c("Pr[T]" = "black", "Pr[Media Muestral]" = "red")
-grafico_comparacion_precision <- ggplot(data = datos_graficos, aes(x = experimentos, group = 1)) + 
+grafico_comparacion_precision <- ggplot(data = datos_graficos, aes(x = tamaño_muestral, group = 1)) + 
         geom_line(aes(y = precisión_estadistico, color = "Pr[T]"), size = 0.75) + 
         geom_point(aes(y = precisión_estadistico, color = "Pr[T]"), size = 3) + 
         geom_line(aes(y = precisión_mediamuestral, color = "Pr[Media Muestral]"), size = 0.75) +
         geom_point(aes(y = precisión_mediamuestral, color = "Pr[Media Muestral]"), size = 3) + 
         scale_color_manual(values = colores_precision) +
         ggtitle(expression(bold(paste("Precisión de los estimadores de ", mu)))) + 
-        xlab("Número de muestras de tamaño 10") + ylab("Precisión") +
+        xlab("Tamaño muestral (n)") + ylab("Precisión") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -390,14 +393,14 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 En este caso hemos seguido el mismo procedimiento que en las anteriores propiedades, obteniendo el siguiente gráfico:
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 colores_ecm <- c("ECM[T]" = "black", "ECM[Media Muestral]" = "red")
-grafico_comparacion_ECM <- ggplot(data = datos_graficos, aes(x = experimentos, group = 1)) + 
+grafico_comparacion_ECM <- ggplot(data = datos_graficos, aes(x = tamaño_muestral, group = 1)) + 
         geom_line(aes(y = ECM_estadistico, color = "ECM[T]"), size = 0.75) + 
         geom_point(aes(y = ECM_estadistico, color = "ECM[T]"), size = 3) + 
         geom_line(aes(y = ECM_mediamuestral, color = "ECM[Media Muestral]"), size = 0.75) +
         geom_point(aes(y = ECM_mediamuestral, color = "ECM[Media Muestral]"), size = 3) + 
         scale_color_manual(values = colores_ecm) +
         ggtitle(expression(bold(paste("ECM de los estimadores de ", mu)))) + 
-        xlab("Número de muestras de tamaño 10") + ylab("Error Cuadrático Medio (ECM)") +
+        xlab("Tamaño muestral (n)") + ylab("Error Cuadrático Medio (ECM)") +
         theme(legend.position = "top",
               legend.title = element_blank(),
               legend.text = element_text(size = 14),
@@ -406,6 +409,7 @@ grafico_comparacion_ECM <- ggplot(data = datos_graficos, aes(x = experimentos, g
               axis.title = element_text(size = 13, face = "bold"), 
               plot.title = element_text(size = 18, face = 'bold', 
                                         hjust = 0.5)) 
+
 grafico_comparacion_ECM
 ```
 
@@ -422,7 +426,9 @@ En nuestro caso hemos tenido que probar la consistencia numéricamente, puesto q
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "350px"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/consistencia.png")
 ```
-Podemos observar como al aumentar el tamaño muestral (es decir cuando n tiende a infinito), la varianza y el sesgo de ambos estimadores tienden a cero. Esto nos permite afirmar con bastante seguridad que nuestro estimador es **la media muestral y T son estimadores consistentes para la media poblacional**, es decir, que al aumentar el tamaño muestral se aproximan bien a ella.
+Podemos observar como al aumentar el tamaño muestral (es decir cuando n tiende a infinito), la varianza y el sesgo de ambos estimadores tienden a cero. Esto nos permite afirmar con bastante seguridad que  **la media muestral y T son estimadores consistentes para la media poblacional**, es decir, que al aumentar el tamaño muestral se aproximan bien a ella. 
+
+Además sabemos por teoria que la media muestral es consistente para la media poblacional, ya que su varianza es la varianza poblacional dividida entre n. Esto supone que cuando n tiende a infinito la varianza converge a 0, y como el sesgo es 0, es consistente para la media poblacional. 
 
 \newpage
 ## 4.5 Invarianza
@@ -550,7 +556,7 @@ grafico_estadistico_histogram_density <- ggplot(data = datosgrafico, aes(x = Est
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 grafico_estadistico_histogram_density
 ```
-Nuestro estadístico para la muestra contaminada se desplaza en promedio relativamente poco de la media poblacional. A la mediana el pasa algo similar siendo también un buen estimador del parámetro. En cuanto a las medidas de dispersión, los datos atípicos no han provocado cambios relevantes en los valores de la SD, IQR y MAD respecto a la muestra sin contaminar. Al contrario, sucede con las medidas de forma que, como indica el coeficiente de asimetría, tiene una leve asimetría a la derecha, aunque mayor que en la muestra sin contaminar. La curtosis indica que la distribución del estimador es leptocúrtica ya que su valor es mayor que 3, por lo que es más apuntada y con colas más gruesas que la normal.
+Nuestro estadístico para la muestra contaminada se desplaza en promedio relativamente poco de la media poblacional. A la mediana le pasa algo similar, siendo también un buen estimador del parámetro. En cuanto a las medidas de dispersión, los datos atípicos no han provocado cambios relevantes en los valores de la SD, IQR y MAD respecto a la muestra sin contaminar. Al contrario, sucede con las medidas de forma que, como indica el coeficiente de asimetría (> 1), es asimétrica positiva, siendo su asimetría mayor que en la muestra sin contaminar. La curtosis indica que la distribución del estimador es leptocúrtica ya que su valor es mayor que 3, por lo que es mucho más apuntada y con colas más pesadas que la normal.
 
 
 \newpage
@@ -603,6 +609,13 @@ Como indica el coeficiente de curtosis, esta distribución es prácticamente mes
 En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es muy pequeña, así como el IQR y la MAD, indicando esto que los valores están muy concentrados en torno al centro, que en este caso está cerca de la media.
 
 \newpage
+##### 4.6.2.1.1 Varianza de la media muestral
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/varianza_mediamuestral_original.png")
+```
+Podemos observar que la varianza de la media muestral que hemos obtenido, es muy parecida a la teórica, sobreestimando el valor teórico en tan solo un 9%. Si el tamaño muestral aumentará infinitamente, la varianza muestral convergería a la poblacional. 
+
+\newpage
 #### 4.6.2.2 Muestra contaminada
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/tabla_mediamuestral.png")
@@ -623,14 +636,22 @@ grafico_mediamuestral_histogram_density <- ggplot(data = datosgrafico, aes(x = m
               plot.title = element_text(size = 18, face = 'bold', hjust = 0.5)) + xlim(0, 1)
 grafico_mediamuestral_histogram_density
 ```
-Como podemos observar en el gráfico, la esperanza de la media muestral de la muestra contaminada es muy diferente a la original, concretamente un 20% mayor. Podemos observar que es muy asimétrica a la derecha. Como indica el coeficiente de curtosis, esta distribución es platicúrtica, es decir, es menos apuntada y con colas menos gruesas que la normal. Comparando las medidas de dispersión en la muestra contaminada y la original, la desviación típica muestral (SD) es un 15% mayor, así como el IQR y la MAD, que son un 28% y 18% respectivamente.
+Como podemos observar en el gráfico, la esperanza de la media muestral de la muestra contaminada es muy diferente a la original, concretamente un 20% mayor. Podemos observar que es muy asimétrica a la derecha. El coeficiente de curtosis indica que esta distribución es platicúrtica, es decir, menos apuntada y con colas menos gruesas que la normal. Comparando las medidas de dispersión en la muestra contaminada y la original, la desviación típica muestral (SD) es un 15% mayor, así como el IQR y la MAD, que son un 28% y 18% respectivamente.
+
+\newpage
+##### 4.6.2.2.1 Varianza de la media muestral
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/varianza_mediamuestral_contaminada.png")
+```
+Al contaminar los datos, podemos observar como la varianza de la media muestral está muy lejos de su valor teórico, sobreestimándolo en un 900% . Esto es otro indicador de la poca robustez de la media muestral como estimador.
+
 
 \newpage
 #### 4.6.2.3 Comparando la Media Muestral en la muestra original y contaminada
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "450px", fig.align = "center", out.height = "400px"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/PLOTS/robustez_comparativa_mediamuestral.png")
 ```
-Podemos observar que al añadir datos atípicos, la media muestral es muy poco robusta, ya que en promedio se desplaza mucho de la media poblacional. Cuando la muestra no contiene datos atípicos, la media muestral sobreestima en promedio la media poblacional en un 1.45412 %, mientras que al añadir datos atípicos lo hace en un 42.08146 % . Esto nos permite concluir que **la media muestral no es un estimador robusto de la poblacional**.
+Podemos observar que al añadir datos atípicos, la media muestral es muy poco robusta, ya que en promedio se desplaza mucho de la media poblacional. Cuando la muestra no contiene datos atípicos, la media muestral sobreestima en promedio la media poblacional en un 1.45412 %, mientras que al añadir datos atípicos lo hace en un 42.08146 % . Además, hemos visto que en el caso de la muestra original, la varianza de la media muestral sobreestima la varianza poblacional tan solo en un 4%, mientras que al añadir datos atípicos lo hace en un 900%. Esto nos permite concluir que **la media muestral no es un estimador robusto de la poblacional**.
 
 
 \newpage
@@ -642,5 +663,26 @@ Finalmente podemos comparar ambos estimadores (T y la media muestral), observand
 
 \newpage
 ## 4.7 Suficiencia
+```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "650px", fig.align = "center", out.height = "600px"}
+knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/suficiencia.jpg")
+```
 
+# 5. Bibliografía
+* Asimetría estadística. (2020). Recuperado de: https://es.wikipedia.org/w/index.php?title=Asimetr%C3%ADa_estad%C3%ADstica&oldid=125822430
+* Beta distribution. (2020). Recuperado de: https://en.wikipedia.org/w/index.php?title=Beta_distribution&oldid=981642297
+* Brown, Kyle. (2020). Understanding R: Mathematical Expressions. Recuperado de: https://rpubs.com/kylewbrown/math-expressions
+* Características de estimadores. (s. f.). Recuperado de: https://www.uv.es/webgid/Inferencial/42_caractersticas_estimadores.html#:~:text=Diremos%20que%20un%20estimador%20es,muestra%20aproxime%20al%20par%C3%A1metro%20poblacional.
+* Commonly used symbols in R Markdown. (s. f.). Recuperado de: https://people.ok.ubc.ca/jpither/modules/Symbols_markdown.html
+* Curtosis. (2020). Recuperado de: https://es.wikipedia.org/w/index.php?title=Curtosis&oldid=128327400
+* Curtosis - Definición, qué es y concepto. (2017). Recuperado de: https://economipedia.com/definiciones/curtosis.html
+* Función gamma. (2020). Recuperado de: https://ast.wikipedia.org/w/index.php?title=Funci%C3%B3n_gamma&oldid=2985655
+* Greek letters, symbols, and line breaks inside a ggplot legend label . (s. f.). Recuperado de: https://stackoverflow.com/questions/27690729/greek-letters-symbols-and-line-breaks-inside-a-ggplot-legend-label
+* Mathematical Annotation in R. (s. f.). Recuperado de: https://stat.ethz.ch/R-manual/R-devel/library/grDevices/html/plotmath.html
+* Medidas de dispersión. (2020). Recuperado de: https://es.wikipedia.org/w/index.php?title=Medidas_de_dispersi%C3%B3n&oldid=128745923
+* Molina, Luis. (2009). Apuntes de Latex. Recuperado de: http://metodos.fam.cie.uva.es/~latex/apuntes/apuntes3.pdf
+* Moment Generating Function of Beta Distribution. (2018). Recuperado de: https://proofwiki.org/wiki/Moment_Generating_Function_of_Beta_Distribution#:~:text=Let%20X%E2%88%BCBeta(%CE%B1,%2Br)tkk!
+* Ramirez, Oscar. (2015). Escribiendo funciones en R. Recuperado de: https://rpubs.com/osoramirez/93049
+* Reilly, Archer. (2020). Writing Mathematic Fomulars in Markdown. Recuperado de: http://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/
+* Remove space between two graphs in R. (s. f.). Recuperado de: https://stackoverflow.com/questions/22226358/remove-space-between-two-graphs
+* Rincón, Luis. (2013). Distribución beta. Recuperado de: https://www.youtube.com/watch?v=cqvEph836gM&ab_channel=LuisRinc%C3%B3n
 

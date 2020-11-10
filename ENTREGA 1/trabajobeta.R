@@ -107,7 +107,7 @@ varianzamediamuestral_data <- data.frame(varianzamediamuestral_real = resultados
            varianzamediamuestral_teorica = resultados$varianza_poblacional / 10)
 colnames(varianzamediamuestral_data) <- c("Valor Obtenido", "Valor Teórico")
 tabla_varianza_muestral_poblacional <- gt(varianzamediamuestral_data) %>% 
-        tab_header(title = md("**Varianza de la Media Muestral**")) %>% 
+        tab_header(title = md("**Varianza de la Media Muestral (muestra original)**")) %>% 
         cols_align(align = "center")
 
 
