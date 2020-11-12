@@ -38,7 +38,7 @@ knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUAT
 
 
 ## 2.0 Forma de la distribución Beta
-Esta distribución adopta formas muy diversas, en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida).
+Esta distribución adopta formas muy diversas en función de los valores de sus parámetros, por ello se utiliza mucho para modelar datos de manera empírica (es decir, observando la forma de la distribución de los datos, se intenta aproximar por la distribución beta con la forma más parecida).
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "400px", fig.align = "center"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 1/IMAGENES/Beta_distribution.png")
 ```
@@ -604,7 +604,7 @@ grafico_mediamuestral_histogram_density_sincontaminar <- ggplot(data = datosgraf
         xlim(0, 1)
 grafico_mediamuestral_histogram_density_sincontaminar
 ```
-Con estos datos se confirmaría el que el valor de la esperanza de las medias muestrales es muy parecida a la media teórica. 
+Con estos datos se confirmaría que el valor de la esperanza de las medias muestrales es muy parecido al valor de la media teórica. 
 Como indica el coeficiente de curtosis, esta distribución es prácticamente mesocúrtica, es decir se parece mucho a una normal y es muy simétrica pero tiene un poco de asimetría a la derecha, por lo que también la mediana se parece mucho a la media al ser una distribución centrada.
 En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es muy pequeña, así como el IQR y la MAD, indicando esto que los valores están muy concentrados en torno al centro, que en este caso está cerca de la media.
 
@@ -613,7 +613,7 @@ En cuanto a las medidas de dispersión, la desviación típica muestral (SD) es 
 ```{r, message = FALSE, warning = FALSE, include = TRUE, echo = FALSE, out.width = "250px", fig.align = "center", out.height = "200px"}
 knitr::include_graphics("C:/Users/marct/Documents/UNI_ESTADISTICA/2o/PRIMER CUATRIMESTRE/INFERENCIA ESTADISTICA I/TRABAJOS/INFERENCIA/ENTREGA 2/IMAGENES/OTROS/varianza_mediamuestral_original.png")
 ```
-Podemos observar que la varianza de la media muestral que hemos obtenido, es muy parecida a la teórica, sobreestimando el valor teórico en tan solo un 9%. Si el tamaño muestral aumentará infinitamente, la varianza muestral convergería a la poblacional. 
+Podemos observar que la varianza de la media muestral que hemos obtenido, es muy parecida a la teórica, sobreestimando el valor teórico en tan solo un 9%. Si el tamaño muestral aumentara infinitamente, la varianza muestral convergería a la poblacional. 
 
 \newpage
 #### 4.6.2.2 Muestra contaminada
